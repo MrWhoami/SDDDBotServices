@@ -1,6 +1,9 @@
 package com.mrwhoami.qqservices
 
-class Repeater() {
+import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.message.data.isNotPlain
+
+class Repeater {
     data class RepeaterBuffer (
             var lastMsg : String? = null,
             var repeated: Boolean = false,
@@ -8,36 +11,48 @@ class Repeater() {
     )
     private var grp2Buffer = hashMapOf<Long, RepeaterBuffer>()
 
-    fun recvGrpMsg(grpId: Long, usrId : Long, msg: String): String? {
+    suspend fun recvGrpMsg(event : GroupMessageEvent) {
+        val grpId = event.group.id
+        val usrId = event.sender.id
+        val msg = event.message
+
         // Haven't receive any message from the group. Initialize it.
         if (!grp2Buffer.containsKey(grpId)) {
             grp2Buffer[grpId] = RepeaterBuffer()
         }
 
         var buffer = grp2Buffer[grpId]!!
+        // If the message is not plain text
+        if (msg.isNotPlain()) {
+            buffer.lastMsg = null
+            buffer.repeated = false
+            buffer.usrIdSet.clear()
+            return
+        }
         // The message is different from the previous message.
-        if (msg != buffer.lastMsg) {
-            buffer.lastMsg = msg
+        if (msg.content != buffer.lastMsg) {
+            buffer.lastMsg = msg.content
             buffer.repeated = false
             buffer.usrIdSet.clear()
             buffer.usrIdSet.add(usrId)
-            return null
+            return
         }
         // The message is already repeated
         if (buffer.repeated) {
-            return null
+            return
         }
         // The message is sent by a user who has sent it before.
         if (buffer.usrIdSet.contains(usrId)) {
-            return null
+            return
         }
         // Add the user to repeater list
         buffer.usrIdSet.add(usrId)
         // If it has been repeated three times, bot repeat it.
         if (buffer.usrIdSet.size >= 3) {
             buffer.repeated = true
-            return msg
+            event.group.sendMessage(buffer.lastMsg!!)
+            return
         }
-        return null
+        return
     }
 }

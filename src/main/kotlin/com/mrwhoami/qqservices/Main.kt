@@ -3,13 +3,11 @@ package com.mrwhoami.qqservices
 import mu.KotlinLogging
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.alsoLogin
+import net.mamoe.mirai.event.events.MemberJoinEvent
 import net.mamoe.mirai.join
-import net.mamoe.mirai.message.data.At
-import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.event.subscribeAlways
-import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.GroupMessageEvent
-import net.mamoe.mirai.message.data.content
+import net.mamoe.mirai.message.data.at
 
 private val logger = KotlinLogging.logger {}
 
@@ -23,14 +21,17 @@ suspend fun main() {
 
     // Initialize services
     val repeater = Repeater()
+    val voteBan = VoteBan()
 
-    miraiBot.subscribeAlways<GroupMessageEvent> { event ->
-        logger.info { "Grp [${event.group.id}][${event.sender.id}]：${event.message.content}" }
+    miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
-        val reply_msg = repeater.recvGrpMsg(event.group.id, event.sender.id, event.message.content)
-        if (reply_msg != null) {
-            reply(reply_msg)
-        }
+        repeater.recvGrpMsg(it)
+        voteBan.recvGrpMsg(it)
     }
+
+    miraiBot.subscribeAlways<MemberJoinEvent> {
+        it.group.sendMessage(it.member.at() + "欢迎新组长！")
+    }
+
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
 }
