@@ -11,7 +11,7 @@ class Repeater {
     )
     private var grp2Buffer = hashMapOf<Long, RepeaterBuffer>()
 
-    suspend fun recvGrpMsg(event : GroupMessageEvent) {
+    suspend fun onGrpMsg(event : GroupMessageEvent) {
         val grpId = event.group.id
         val usrId = event.sender.id
         val msg = event.message

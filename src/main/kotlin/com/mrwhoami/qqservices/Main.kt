@@ -25,8 +25,8 @@ suspend fun main() {
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
-        repeater.recvGrpMsg(it)
-        voteBan.recvGrpMsg(it)
+        repeater.onGrpMsg(it)
+        voteBan.onGrpMsg(it)
     }
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
