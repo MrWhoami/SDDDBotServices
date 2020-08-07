@@ -30,7 +30,7 @@ suspend fun main() {
     }
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
-        it.group.sendMessage(it.member.at() + "欢迎新组长！")
+        it.group.sendMessage(it.member.at() + "欢迎新群友！请认真阅读群公告~")
     }
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出

@@ -21,7 +21,7 @@ class Repeater {
             grp2Buffer[grpId] = RepeaterBuffer()
         }
 
-        var buffer = grp2Buffer[grpId]!!
+        val buffer = grp2Buffer[grpId]!!
         // If the message is not plain text
         if (msg.isNotPlain()) {
             buffer.lastMsg = null
