@@ -1,7 +1,7 @@
 package com.mrwhoami.qqservices
 
 import net.mamoe.mirai.message.GroupMessageEvent
-import net.mamoe.mirai.message.data.isNotPlain
+import net.mamoe.mirai.message.data.*
 
 class Repeater {
     data class RepeaterBuffer (
@@ -23,7 +23,7 @@ class Repeater {
 
         val buffer = grp2Buffer[grpId]!!
         // If the message is not plain text
-        if (msg.isNotPlain()) {
+        if (!msg.all{ block -> block.isContentEmpty() || block.isPlain() }) {
             buffer.lastMsg = null
             buffer.repeated = false
             buffer.usrIdSet.clear()
