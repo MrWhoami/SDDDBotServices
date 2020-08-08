@@ -1,6 +1,8 @@
 package com.mrwhoami.qqservices
 
 import mu.KotlinLogging
+import net.mamoe.mirai.contact.isAdministrator
+import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 
@@ -8,6 +10,10 @@ class MuteMenu {
     private val logger = KotlinLogging.logger {}
 
     suspend fun onGrpMsg (event: GroupMessageEvent) {
+        // Check if the bot is a admin in the group
+        if (! event.group.botAsMember.isAdministrator() ){
+            return
+        }
         // Check if this is text message
         val msg = event.message
         if (!msg.all{ block -> block.isContentEmpty() || block.isPlain() }) {
@@ -18,8 +24,13 @@ class MuteMenu {
         if (!msgContent.contains("我要休息")) {
             return
         }
-        // Check for the unit
         val customer = event.sender
+        // Check for the privilege
+        if (customer.isAdministrator() || customer.isOwner()) {
+            event.group.sendMessage(customer.at() + "你太强了，这个套餐不适合你，还是另请高明吧")
+            return
+        }
+        // Check for the unit
         val scale = when {
             msgContent.contains("小时") -> 60 * 60
             msgContent.contains("分钟") -> 60
