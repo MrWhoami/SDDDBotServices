@@ -41,12 +41,40 @@ class MuteMenu {
         }
         // Parse time and check.
         val time = msgContent.filter { it.isDigit() }
+        var timeNum = -1
         if (time.isEmpty() || time.length > 5) {
-            event.group.sendMessage(customer.at() + "你这个时间不对劲")
-            return
+            val timeChar = mapOf<Char, Int>(
+                Pair('一', 1), Pair('二', 2), Pair('三', 3),
+                Pair('四', 4), Pair('五', 5), Pair('六', 6),
+                Pair('七', 7), Pair('八', 8), Pair('九', 9))
+            if (msgContent.any { timeChar.any { p: Map.Entry<Char, Int> -> p.key == it }}) {
+                // Convert Time
+                var current = 0
+                var total = 0
+                msgContent.forEach {
+                    if (it == '十') {
+                        if (current == 0) total += 10
+                        else {
+                            total += current * 10
+                            current = 0
+                        }
+                    }
+                    if (it == '百') {
+                        total += current * 100
+                        current = 0
+                    }
+                    current += timeChar.getOrDefault(it, 0)
+                }
+                total += current
+                if (total > 0) timeNum = total
+            }
+            else {
+                event.group.sendMessage(customer.at() + "你这个时间不对劲")
+                return
+            }
         }
-        val timeNum = time.toInt() * scale
-        if (timeNum >= 2592000) {
+        else timeNum = time.toInt() * scale
+        if (timeNum < 0 || timeNum >= 2592000) {
             event.group.sendMessage(customer.at() + "你这个时间不对劲")
             return
         }
