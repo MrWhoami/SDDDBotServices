@@ -23,6 +23,10 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture)
             }
+            msgContent.contains("给我精致睡眠") || msgContent.contains("给我精致水母") -> {
+                event.sender.mute(7 * 60 * 60)
+                grp.sendMessage("大臭猪晚安(❁´◡`❁)")
+            }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (event.sender.isAdministrator() || event.sender.isOwner()) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
