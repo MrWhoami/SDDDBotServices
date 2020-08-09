@@ -1,6 +1,8 @@
 package com.mrwhoami.qqservices
 
 import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.message.code.CodableMessage
+import net.mamoe.mirai.message.code.parseMiraiCode
 import net.mamoe.mirai.message.data.*
 
 class Repeater {
@@ -10,6 +12,20 @@ class Repeater {
             var usrIdSet : HashSet<Long> = hashSetOf()
     )
     private var grp2Buffer = hashMapOf<Long, RepeaterBuffer>()
+
+    private fun message2MiraiCode(message: MessageChain): String? {
+        var buffer = ""
+        for (msg in message) {
+            if (msg.isContentEmpty()) continue
+            else if (msg.isPlain()) buffer += msg.content
+            else if (msg is CodableMessage) buffer += msg.toMiraiCode()
+            else return null
+        }
+        if (buffer.isEmpty()) {
+            return null
+        }
+        return buffer
+    }
 
     suspend fun onGrpMsg(event : GroupMessageEvent) {
         val grpId = event.group.id
@@ -22,16 +38,17 @@ class Repeater {
         }
 
         val buffer = grp2Buffer[grpId]!!
-        // If the message is not plain text
-        if (!msg.all{ block -> block.isContentEmpty() || block.isPlain() }) {
+        // Check if the message is repeatable
+        val miraiMsg = message2MiraiCode(msg)
+        if (miraiMsg == null) {
             buffer.lastMsg = null
             buffer.repeated = false
             buffer.usrIdSet.clear()
             return
         }
         // The message is different from the previous message.
-        if (msg.content != buffer.lastMsg) {
-            buffer.lastMsg = msg.content
+        if (miraiMsg != buffer.lastMsg) {
+            buffer.lastMsg = miraiMsg
             buffer.repeated = false
             buffer.usrIdSet.clear()
             buffer.usrIdSet.add(usrId)
@@ -50,7 +67,7 @@ class Repeater {
         // If it has been repeated three times, bot repeat it.
         if (buffer.usrIdSet.size >= 3) {
             buffer.repeated = true
-            event.group.sendMessage(buffer.lastMsg!!)
+            event.group.sendMessage(buffer.lastMsg!!.parseMiraiCode())
             return
         }
         return
