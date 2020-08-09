@@ -4,6 +4,7 @@ import net.mamoe.mirai.contact.isAdministrator
 import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.content
+import net.mamoe.mirai.message.sendImage
 import kotlin.random.Random
 
 class QuestionAnswer {
@@ -18,7 +19,10 @@ class QuestionAnswer {
 
         when {
             msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn")
-            msgContent.contains("老婆") -> grp.sendMessage("sjb,fsnrjsnlpm")
+            msgContent.contains("老婆") -> {
+                val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
+                grp.sendImage(picture)
+            }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (event.sender.isAdministrator() || event.sender.isOwner()) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
