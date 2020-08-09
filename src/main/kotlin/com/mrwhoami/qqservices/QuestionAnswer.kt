@@ -41,7 +41,6 @@ class QuestionAnswer {
                 } else {
                     if (grp.botPermission.isAdministrator()) {
                         event.sender.mute(Random.nextInt(1, 120) * 60)
-                        event.sender.mute(Random.nextInt(1, 120) * 60)
                     }
                     grp.sendMessage("大臭猪你爬( `д´)")
                 }

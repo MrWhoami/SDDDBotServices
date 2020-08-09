@@ -7,7 +7,6 @@ import net.mamoe.mirai.event.events.MemberJoinEvent
 import net.mamoe.mirai.join
 import net.mamoe.mirai.event.subscribeAlways
 import net.mamoe.mirai.message.GroupMessageEvent
-import net.mamoe.mirai.message.data.at
 
 private val logger = KotlinLogging.logger {}
 
@@ -24,6 +23,7 @@ suspend fun main() {
     val voteBan = VoteBan()
     val muteMenu = MuteMenu()
     val qAndA = QuestionAnswer()
+    val welcome = Welcome(miraiBot.groups)
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
@@ -31,11 +31,12 @@ suspend fun main() {
         voteBan.onGrpMsg(it)
         muteMenu.onGrpMsg(it)
         qAndA.onGrpMsg(it)
+        welcome.onGrpMsg(it)
 
     }
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
-        it.group.sendMessage(it.member.at() + "欢迎新群友！请认真阅读群公告~")
+        welcome.onMemberJoin(it)
     }
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
