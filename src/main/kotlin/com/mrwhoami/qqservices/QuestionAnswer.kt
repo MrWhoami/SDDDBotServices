@@ -33,7 +33,9 @@ class QuestionAnswer {
                     grp.sendMessage("大臭猪你爬( `д´)")
                 }
             }
-            containsBotName(msgContent) && (msgContent.contains("亲亲") || msgContent.contains("啾啾")) -> {
+            containsBotName(msgContent) && (msgContent.contains("亲亲") ||
+                                            msgContent.contains("啾啾") ||
+                                            msgContent.contains("mua")) -> {
                 grp.sendMessage("大臭猪不要啾啾我⊂彡☆))∀`)")
             }
             containsBotName(msgContent) && msgContent.contains("日我") -> {
