@@ -1,6 +1,5 @@
 package com.mrwhoami.qqservices
 
-import mu.KotlinLogging
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.at
 import net.mamoe.mirai.message.data.content
@@ -10,7 +9,7 @@ import kotlin.random.Random
 
 class VoteBan {
     data class VoteBuffer (
-            var voters : HashSet<Long> = hashSetOf<Long>(),
+            var voters : HashSet<Long> = hashSetOf(),
             var lastTime : Instant = Instant.now()
     )
 

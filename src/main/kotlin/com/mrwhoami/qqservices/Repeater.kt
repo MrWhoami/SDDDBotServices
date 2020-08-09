@@ -7,7 +7,7 @@ class Repeater {
     data class RepeaterBuffer (
             var lastMsg : String? = null,
             var repeated: Boolean = false,
-            var usrIdSet : HashSet<Long> = hashSetOf<Long>()
+            var usrIdSet : HashSet<Long> = hashSetOf()
     )
     private var grp2Buffer = hashMapOf<Long, RepeaterBuffer>()
 

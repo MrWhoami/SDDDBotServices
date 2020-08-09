@@ -23,12 +23,15 @@ suspend fun main() {
     val repeater = Repeater()
     val voteBan = VoteBan()
     val muteMenu = MuteMenu()
+    val qAndA = QuestionAnswer()
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
         repeater.onGrpMsg(it)
         voteBan.onGrpMsg(it)
         muteMenu.onGrpMsg(it)
+        qAndA.onGrpMsg(it)
+
     }
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
