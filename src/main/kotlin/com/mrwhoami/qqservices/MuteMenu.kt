@@ -21,7 +21,7 @@ class MuteMenu {
         }
         // Check if this is an order
         val msgContent = msg.content
-        if (!msgContent.contains("我要休息")) {
+        if (!msgContent.contains("我要休息") && !msgContent.contains("口我")) {
             return
         }
         val customer = event.sender
