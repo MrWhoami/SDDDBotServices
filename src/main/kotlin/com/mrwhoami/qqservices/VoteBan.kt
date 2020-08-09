@@ -1,6 +1,9 @@
 package com.mrwhoami.qqservices
 
+import net.mamoe.mirai.contact.isAdministrator
+import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.at
 import net.mamoe.mirai.message.data.content
 import java.time.Duration
@@ -23,7 +26,7 @@ class VoteBan {
         val voterId = voter.id
 
         val msg = event.message
-        if (!msg.content.contains("口水母")) {
+        if (!(msg.content.contains("口水母") || msg.content.contains("口他"))) {
             return
         }
         // Check voter time
@@ -38,16 +41,24 @@ class VoteBan {
         val targetId = if (msg.content.contains("口水母")) {
             1260775699L
         } else {
-            // TODO: Add qqId parsing code here
-            1260775699L
+            val tmp = event.message[At]?.target
+            if (tmp == null) {
+                event.group.sendMessage("请指定一个投票目标")
+                return
+            }
+            tmp
         }
         val targetPair = Pair(groupId, targetId)
-        // Check if the target is actually in the group
+        // Check if the target is actually in the group and mutable
         if (!event.group.members.contains(targetId)) {
             event.group.sendMessage("$targetId 并不在群内")
             return
         }
         val target = event.group[targetId]
+        if (target.isAdministrator() || target.isOwner()) {
+            event.group.sendMessage("啊这")
+            return
+        }
         // Check if target already exists
         if (!grp2Buffer.containsKey(targetPair)) {
             grp2Buffer[targetPair] = VoteBuffer(hashSetOf(voterId), now)
