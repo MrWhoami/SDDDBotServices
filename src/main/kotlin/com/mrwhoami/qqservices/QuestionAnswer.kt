@@ -32,6 +32,9 @@ class QuestionAnswer {
             containsBotName(msgContent) && (msgContent.contains("亲亲") || msgContent.contains("啾啾")) -> {
                 grp.sendMessage("大臭猪不要啾啾我⊂彡☆))∀`)")
             }
+            containsBotName(msgContent) && msgContent.contains("日我") -> {
+                grp.sendMessage("你不对劲，你有问题，你快点爬")
+            }
             containsBotName(msgContent) && msgContent.contains("活着") -> {
                 val answers = listOf(
                         "应该算活着吧",
