@@ -44,7 +44,7 @@ class MuteMenu {
         var timeNum = -1
         if (time.isEmpty() || time.length > 5) {
             val timeChar = mapOf<Char, Int>(
-                Pair('一', 1), Pair('二', 2), Pair('三', 3),
+                Pair('一', 1), Pair('二', 2), Pair('两', 2), Pair('俩', 2), Pair('三', 3),
                 Pair('四', 4), Pair('五', 5), Pair('六', 6),
                 Pair('七', 7), Pair('八', 8), Pair('九', 9))
             if (msgContent.any { timeChar.any { p: Map.Entry<Char, Int> -> p.key == it }}) {
@@ -66,7 +66,7 @@ class MuteMenu {
                     current += timeChar.getOrDefault(it, 0)
                 }
                 total += current
-                if (total > 0) timeNum = total
+                if (total > 0) timeNum = total * scale
             }
             else {
                 event.group.sendMessage(customer.at() + "你这个时间不对劲")
