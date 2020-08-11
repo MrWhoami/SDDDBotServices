@@ -19,6 +19,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib"
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.29'
+    implementation 'com.beust:klaxon:5.0.1'
+    implementation "com.github.doyaaaaaken:kotlin-csv-jvm:0.7.3"
 }
 
 sourceSets {
