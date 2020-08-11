@@ -45,6 +45,18 @@ class QuestionAnswer {
                     grp.sendMessage("大臭猪你爬( `д´)")
                 }
             }
+            containsBotName(msgContent) && msgContent.contains("傻") -> {
+                if (event.sender.isAdministrator() || event.sender.isOwner()) {
+                    grp.sendMessage("人家才不傻！(>д<)")
+                } else {
+                    if (grp.botPermission.isAdministrator()) {
+                        grp.sendMessage("大臭猪你才傻！(　^ω^)")
+                    }
+                }
+            }
+            containsBotName(msgContent) && (msgContent.contains("可爱")  -> {
+                grp.sendMessage("欸嘿~(*ﾟ∀ﾟ*)")
+            }
             containsBotName(msgContent) && (msgContent.contains("亲亲") ||
                                             msgContent.contains("啾啾") ||
                                             msgContent.contains("mua")) -> {
