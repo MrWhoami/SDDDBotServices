@@ -74,7 +74,17 @@ class QuestionAnswer {
                         "似乎听到了DD的声音",
                         "希望不是在说我"
                 )
-                grp.sendMessage(answers[Random.nextInt(answers.size)])
+                val picAnswer = listOf(
+                        "/QuestionAnswer/hina_sdys.jpg",
+                        "/QuestionAnswer/kaf_question.jpg"
+                )
+                val idx = Random.nextInt(-picAnswer.size, answers.size)
+                if (idx >= 0){
+                    grp.sendMessage(answers[idx])
+                } else {
+                    val picture = this::class.java.getResource(picAnswer[-idx - 1])
+                    grp.sendImage(picture)
+                }
             }
         }
     }
