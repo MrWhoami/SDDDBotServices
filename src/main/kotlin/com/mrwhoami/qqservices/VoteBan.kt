@@ -16,10 +16,13 @@ class VoteBan {
             var lastTime : Instant = Instant.now()
     )
 
+    private val disabledInGroup = listOf(1094098748L)
     private var grp2Buffer = hashMapOf<Pair<Long, Long>, VoteBuffer>()
     private var usrId2LastVoteTime = hashMapOf<Long, Instant>()
 
     suspend fun onGrpMsg(event: GroupMessageEvent) {
+        if (disabledInGroup.contains(event.group.id)) return
+        if (!event.group.botPermission.isAdministrator()) return
         // Check if this is a ban vote message.
         val groupId = event.group.id
         val voter = event.sender
@@ -55,14 +58,14 @@ class VoteBan {
             return
         }
         val target = event.group[targetId]
-        if (target.isAdministrator() || target.isOwner()) {
+        if (event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L) {
             event.group.sendMessage("啊这")
             return
         }
         // Check if target already exists
         if (!grp2Buffer.containsKey(targetPair)) {
             grp2Buffer[targetPair] = VoteBuffer(hashSetOf(voterId), now)
-            event.group.sendMessage(target.at() + "你已经被投 1 票，15分钟集齐3票即可获得1~40分钟随机口球一份！")
+            event.group.sendMessage(target.at() + "你已经被投 1 票，15分钟集齐3票即可获得10~40分钟随机口球一份！")
             return
         } else {
             val buffer = grp2Buffer[targetPair]!!
@@ -77,12 +80,12 @@ class VoteBan {
             buffer.lastTime = now
             if (buffer.voters.size >= 3) {
                 buffer.voters.clear()
-                val timeLength = Random.nextInt(1, 40)
+                val timeLength = Random.nextInt(10, 41)
                 event.group.sendMessage(target.at() + "大成功~休息 $timeLength 分钟吧！")
                 target.mute(timeLength * 60)
                 return
             } else {
-                event.group.sendMessage(target.at() + "你已经被投 ${buffer.voters.size} 票，15分钟集齐3票即可获得1~40分钟随机口球一份！")
+                event.group.sendMessage(target.at() + "你已经被投 ${buffer.voters.size} 票，15分钟集齐3票即可获得10~40分钟随机口球一份！")
                 return
             }
         }

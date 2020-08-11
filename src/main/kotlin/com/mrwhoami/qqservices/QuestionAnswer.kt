@@ -8,6 +8,8 @@ import net.mamoe.mirai.message.sendImage
 import kotlin.random.Random
 
 class QuestionAnswer {
+    private val disabledInGroup = listOf(1094098748L)
+
     private fun containsBotName(msgContent : String) : Boolean{
         return msgContent.contains("bot") || msgContent.contains("波特") || msgContent.contains("机器人")
     }
@@ -25,6 +27,8 @@ class QuestionAnswer {
     }
 
     suspend fun onGrpMsg(event: GroupMessageEvent) {
+        if (disabledInGroup.contains(event.group.id)) return
+
         val msg = event.message
         val msgContent = getPlainText(msg) ?: return
         val grp = event.group
