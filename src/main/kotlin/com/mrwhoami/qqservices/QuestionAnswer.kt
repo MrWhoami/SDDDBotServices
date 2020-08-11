@@ -35,6 +35,10 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture)
             }
+            msgContent.contains("给我精致睡眠") || msgContent.contains("给我精致水母") -> {
+                event.sender.mute(7 * 60 * 60)
+                grp.sendMessage("大臭猪晚安(❁´◡`❁)")
+            }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (event.sender.isAdministrator() || event.sender.isOwner()) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
@@ -62,7 +66,7 @@ class QuestionAnswer {
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
             msgContent.contains("功能列表") -> {
-                grp.sendMessage("投票禁言 - 口水母\n禁言套餐 - 我要休息/口我x分钟/小时\n复读机\nQ&A")
+                grp.sendMessage("投票禁言 - 口水母\n禁言套餐 - 我要休息/口我x分钟/小时\n精致睡眠 - 给我精致睡眠/水母\n复读机\nQ&A")
             }
             containsBotName(msgContent) -> {
                 val answers = listOf(
