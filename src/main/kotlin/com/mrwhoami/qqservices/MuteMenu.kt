@@ -74,7 +74,7 @@ class MuteMenu {
             }
         }
         else timeNum = time.toInt() * scale
-        if (time.toInt() == 14514 || time.toInt() == 64364 || time.toInt() == 89464) {
+        if (time.toInt() == 114514 || time.toInt() == 364364 || time.toInt() == 889464) {
             customer.mute(1200)
             event.group.sendMessage("大臭猪以为我看不懂么，爬！( `д´)")
             return
