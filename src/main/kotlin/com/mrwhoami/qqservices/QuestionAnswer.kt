@@ -34,7 +34,7 @@ class QuestionAnswer {
         val grp = event.group
 
         when {
-            msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
+            msgContent.contains("zaima") -> grp.sendMessage("buzai, cnm (　^ω^)")
             msgContent.contains("老婆") -> {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture)
