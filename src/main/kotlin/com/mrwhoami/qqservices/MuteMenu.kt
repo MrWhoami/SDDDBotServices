@@ -83,7 +83,7 @@ class MuteMenu {
             return
         }
         if (total == 114514) || total == 364364 || total == 889464) {
-            customer.mute(600)
+            customer.mute(Random.nextInt(1, 60) * 60)
             event.group.sendMessage("以为我看不懂么，爬！( `д´)")
             return
         }
