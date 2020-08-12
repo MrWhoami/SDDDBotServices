@@ -71,7 +71,7 @@ class QuestionAnswer {
             containsBotName(msgContent) && (msgContent.contains("有") ||
                                             msgContent.contains("能") ||
                                             msgContent.contains("可以")) -> {
-                grp.sendMessage("你来帮我码代码就有了\nhttps://github.com/MrWhoami/SDDDBotServices")
+                grp.sendMessage("你来帮我码代码就有了")
             }
             containsBotName(msgContent) && msgContent.contains("活着") -> {
                 val answers = listOf(
