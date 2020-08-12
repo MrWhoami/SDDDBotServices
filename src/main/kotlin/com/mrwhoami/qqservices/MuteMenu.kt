@@ -82,6 +82,11 @@ class MuteMenu {
             event.group.sendMessage("不点餐在这玩什么呢(|||ﾟдﾟ)")
             return
         }
+        if (total == 114514) || total == 364364 || total == 889464) {
+            customer.mute(600)
+            event.group.sendMessage("以为我看不懂么，爬！( `д´)")
+            return
+        }
         // Now, complete the order
         customer.mute(timeNum)
         event.group.sendMessage("欢迎使用禁言套餐，您的餐齐了，请慢用")
