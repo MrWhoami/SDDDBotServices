@@ -67,10 +67,11 @@ class QuestionAnswer {
                                             msgContent.contains("上我") ||
                                             msgContent.contains("曰我")) -> {
                 grp.sendMessage("你不对劲，你有问题，你快点爬(`ヮ´ )")
+            }    
             containsBotName(msgContent) && (msgContent.contains("有") ||
                                             msgContent.contains("能") ||
                                             msgContent.contains("可以")) -> {
-                    grp.sendMessage("你来帮我码代码就有了")
+                grp.sendMessage("你来帮我码代码就有了")
             }
             containsBotName(msgContent) && msgContent.contains("活着") -> {
                 val answers = listOf(
