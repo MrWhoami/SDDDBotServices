@@ -87,7 +87,6 @@ class MuteMenu {
             event.group.sendMessage("不点餐在这玩什么呢(|||ﾟдﾟ)")
             return
         }
-      
         // Now, complete the order
         customer.mute(timeNum)
         event.group.sendMessage("欢迎使用禁言套餐，您的餐齐了，请慢用")
