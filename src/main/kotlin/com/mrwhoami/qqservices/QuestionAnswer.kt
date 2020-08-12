@@ -11,7 +11,7 @@ class QuestionAnswer {
     private val disabledInGroup = listOf(1094098748L)
 
     private fun containsBotName(msgContent : String) : Boolean{
-        return msgContent.contains("bot") || msgContent.contains("波特") || msgContent.contains("机器人")
+        return msgContent.contains("bot") || msgContent.contains("Bot") || msgContent.contains("BOT") || msgContent.contains("波特") || msgContent.contains("机器人")
     }
 
     private fun getPlainText(messageChain : MessageChain) : String? {
@@ -34,7 +34,7 @@ class QuestionAnswer {
         val grp = event.group
 
         when {
-            msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn")
+            msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
             msgContent.contains("老婆") -> {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture)
@@ -58,8 +58,10 @@ class QuestionAnswer {
                                             msgContent.contains("mua")) -> {
                 grp.sendMessage("大臭猪不要啾啾我⊂彡☆))∀`)")
             }
-            containsBotName(msgContent) && msgContent.contains("日我") -> {
-                grp.sendMessage("你不对劲，你有问题，你快点爬")
+            containsBotName(msgContent) && (msgContent.contains("日我") ||
+                                            msgContent.contains("上我") ||
+                                            msgContent.contains("曰我")) -> {
+                grp.sendMessage("你不对劲，你有问题，你快点爬(`ヮ´ )")
             }
             containsBotName(msgContent) && msgContent.contains("活着") -> {
                 val answers = listOf(
