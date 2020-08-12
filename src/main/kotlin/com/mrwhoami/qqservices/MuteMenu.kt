@@ -74,6 +74,12 @@ class MuteMenu {
             }
         }
         else timeNum = time.toInt() * scale
+        if (time.toInt() == 14514) || time.toInt() == 64364 || time.toInt() == 89464) {
+            customer.mute(Random.nextInt(1, 60) * 60)
+            event.group.sendMessage("以为我看不懂么，爬！( `д´)")
+            event.group.sendMessage("大臭猪以为我看不懂么，爬！( `д´)")
+            return
+        }
         if (timeNum < 0 || timeNum >= 2592000) {
             event.group.sendMessage(customer.at() + "你这个时间不对劲")
             return
