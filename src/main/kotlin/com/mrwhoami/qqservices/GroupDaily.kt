@@ -26,7 +26,7 @@ class GroupDaily {
     private var grp2Admin: HashMap<Long, Long> = hashMapOf()
     private var lock = Mutex()
 
-   fun grpIsUpdating(grpId: Long): Boolean {
+    fun grpIsUpdating(grpId: Long): Boolean {
         return grp2Admin.containsKey(grpId)
     }
 
@@ -42,15 +42,19 @@ class GroupDaily {
             return status
         }
         grp2Admin[grpId] = usrId
-        grp2Buffer[grpId] = ""
         lock.unlock()
         return true
     }
 
-    suspend fun grpSetUpdated(grpId: Long, usrId: Long): Boolean {
+    suspend fun grpUpdate(grpId: Long, usrId: Long, message: String): Boolean {
         lock.lock()
-        if (!grp2Admin.containsKey(grpId) || grp2Admin[grpId] != usrId) return false
+        if (!grp2Admin.containsKey(grpId) || grp2Admin[grpId] != usrId) {
+            lock.unlock()
+            return false
+        }
+        grp2Msg[grpId] = message
         grp2Admin.remove(grpId)
+        saveMapToJson()
         lock.unlock()
         return true
     }
@@ -110,9 +114,28 @@ class GroupDaily {
         return buffer
     }
 
-    suspend fun onGrpMsg(event : GroupMessageEvent) {
-        // If the sender is finishing modifying the daily. Print finished message.
+    suspend fun onGrpMsg(event: GroupMessageEvent) {
         // If the sender is modifying the daily.
+        if (grpIsUpdatingBy(event.group.id, event.sender.id)) {
+            val parsedMessage = messageChainToPureText(event.message)
+            if (parsedMessage == null) {
+                event.group.sendMessage(event.sender.at() + "更新失败。目前只支持纯文本信息，且不能有英文双引号，请重新发送")
+                return
+            }
+            val result = grpUpdate(event.group.id, event.sender.id, parsedMessage)
+            if (!result) {
+                event.group.sendMessage(event.sender.at() + "更新失败。不应该啊，让我们问一下" + event.group[844548205L].at())
+                logger.error {
+                    "Failed to update. Status: [${event.group.id}][${event.sender.id}] Group is updating: ${grpIsUpdatingBy(
+                        event.group.id,
+                        event.sender.id
+                    )}"
+                }
+                return
+            }
+            event.group.sendMessage(event.sender.at() + ("更新成功。当前消息为:\n" + grp2Msg[event.group.id]))
+            return
+        }
         // If the sender is trying to get the daily, just return it if available.
         if (event.message.content.contains("查看日报")) {
             if (grp2Msg.containsKey(event.group.id)) {
@@ -124,85 +147,37 @@ class GroupDaily {
         }
         // If the sender is try to get help,
         if (event.message.content.contains("日报") && (
-                    event.message.content.contains("怎么用") || event.message.content.contains("帮助"))) {
-            event.group.sendMessage(event.sender.at() + "查看日报")
+                    event.message.content.contains("怎么用") || event.message.content.contains("帮助"))
+        ) {
+            event.group.sendMessage(event.sender.at() + "查看日报\n#更新日报")
             return
         }
         // If the sender is trying to Modify the daily.
+        if (event.message.content == "#更新日报") {
+            if (!(event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L)) return
+            if (grpIsUpdating(event.group.id)) {
+                event.group.sendMessage(event.sender.at() + "其他管理员正在更新群日报")
+                return
+            }
+            val result = grpSetUpdatingBy(event.group.id, event.sender.id)
+            if (result) {
+                event.group.sendMessage(event.sender.at() + "进入日报更新模式，您的下一条消息将作为更新内容，仅限纯文本，且请勿使用\"")
+            } else {
+                event.group.sendMessage(event.sender.at() + "进入更新模式失败，可能原因：1.机器人正忙；2.你手慢了")
+            }
+            return
+        }
         // If the sender is trying to Clear the daily.
+        // Special command
+        if (event.sender.id == 844548205L) {
+            if (event.message.content == "#复位状态") {
+                lock.tryLock()
+                grp2Admin.clear()
+                lock.unlock()
+                event.group.sendMessage("复位完毕")
+            }
+        }
         // No command
         return
     }
-
-/*
-suspend fun onGrpMsg(event : GroupMessageEvent) {
-    val groupId = event.group.id
-    val senderId = event.sender.id
-    // Check Lock status
-    if (grp2AdminLock.containsKey(groupId)) {
-        // If locked and admin match, update message.
-        if (senderId == grp2AdminLock[groupId]) {
-            withContext(context) {
-                if (event.message.content == "#结束更新") {
-                    saveMapToJson()
-                    event.group.sendMessage(event.sender.at() + "日报更新成功")
-                    grp2AdminLock.remove(groupId)
-                    return@withContext
-                }
-                val result = messageChainToPureText(event.message)
-                if (result == null) {
-                    event.group.sendMessage(event.sender.at() + "更新失败。目前只支持纯文本信息")
-                    grp2AdminLock.remove(groupId)
-                } else {
-                    grp2Msg[groupId] += result
-                }
-                return@withContext
-            }
-        }
-        // If locked and user not match, send a notice or just ignore.
-        if ((event.message.content == "#更新日报" || event.message.content == "#清空日报") &&
-            (event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L)) {
-            event.group.sendMessage(event.sender.at() + "其他管理员正在更新群日报" + event.group[grp2AdminLock[groupId]!!].at())
-            return
-        }
-        // Send a message
-        if (event.message.content.contains("查看日报")) {
-            event.group.sendMessage(event.sender.at() + "日报正在更新中")
-        }
-        return
-    }
-    // If not locked, user check status.
-    if (event.message.content.contains("查看日报")) {
-        if (!grp2Msg.containsKey(groupId)) {
-            event.group.sendMessage("本群还没有日报")
-            return
-        }
-        event.group.sendMessage(event.sender.at() + grp2Msg[groupId]!!)
-        return
-    }
-    // If not locked, admin request change message.
-    if (event.message.content == "#更新日报" &&
-        (event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L)) {
-        grp2AdminLock[groupId] = senderId
-        grp2Msg[groupId] = "[群日报]\n"
-        event.group.sendMessage(event.sender.at() + "进入日报更新模式，仅限纯文本，且请勿使用\"，在更新结束后请回复#结束更新，所有消息将会拼接" )
-        return
-    }
-    // If not locked, admin request remove message
-    if (event.message.content == "#清空日报" &&
-        (event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L)) {
-        grp2Msg.remove(groupId)
-        saveMapToJson()
-        event.group.sendMessage(event.sender.at() + "日报已清空")
-        return
-    }
-    // Check help
-    if (event.message.content.contains("日报") && (
-                    event.message.content.contains("怎么用") ||
-                    event.message.content.contains("帮助"))) {
-        event.group.sendMessage(event.sender.at() + "查看日报\n#更新日报\n#清空日报")
-        return
-    }
-}
- */
 }
