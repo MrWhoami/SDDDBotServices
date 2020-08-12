@@ -39,7 +39,11 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture)
             }
-            msgContent.contains("给我精致睡眠") || msgContent.contains("给我精致水母") -> {
+            msgContent == "给我精致睡眠" ||
+            msgContent == "给我精致水母" ||
+            msgContent == "我想梦到花花" ||
+            msgContent == "我要梦到花花" ||
+            msgContent == "我现在就要梦到花花" -> {
                 event.sender.mute(7 * 60 * 60)
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
