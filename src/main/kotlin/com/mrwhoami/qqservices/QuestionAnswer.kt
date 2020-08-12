@@ -47,8 +47,8 @@ class QuestionAnswer {
                 event.sender.mute(7 * 60 * 60)
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
-            containsBotName(msgContent) && msgContent.contains("爬") ||
-                                           msgContent.contains("爪巴") -> {
+            containsBotName(msgContent) && (msgContent.contains("爬") ||
+                                            msgContent.contains("爪巴")) -> {
                 if (event.sender.isAdministrator() || event.sender.isOwner()) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
                 } else {
