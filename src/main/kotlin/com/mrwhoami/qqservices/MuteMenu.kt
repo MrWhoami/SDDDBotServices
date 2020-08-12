@@ -75,6 +75,7 @@ class MuteMenu {
         }
         else timeNum = time.toInt() * scale
         if (time.toInt() == 14514 || time.toInt() == 64364 || time.toInt() == 89464) {
+            customer.mute(500)
             event.group.sendMessage("大臭猪以为我看不懂么，爬！( `д´)")
             return
         }
