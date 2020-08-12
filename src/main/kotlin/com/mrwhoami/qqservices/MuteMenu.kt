@@ -74,7 +74,7 @@ class MuteMenu {
             }
         }
         else timeNum = time.toInt() * scale
-        if (total == 114514) || total == 364364 || total == 889464) {
+        if (time.toInt() == 114514) || time.toInt() == 364364 || time.toInt() == 889464) {
             customer.mute(Random.nextInt(1, 60) * 60)
             event.group.sendMessage("以为我看不懂么，爬！( `д´)")
             return
