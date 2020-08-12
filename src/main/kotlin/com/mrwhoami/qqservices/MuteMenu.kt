@@ -74,6 +74,11 @@ class MuteMenu {
             }
         }
         else timeNum = time.toInt() * scale
+        if (total == 114514) || total == 364364 || total == 889464) {
+            customer.mute(Random.nextInt(1, 60) * 60)
+            event.group.sendMessage("以为我看不懂么，爬！( `д´)")
+            return
+        }
         if (timeNum < 0 || timeNum >= 2592000) {
             event.group.sendMessage(customer.at() + "你这个时间不对劲")
             return
@@ -82,11 +87,7 @@ class MuteMenu {
             event.group.sendMessage("不点餐在这玩什么呢(|||ﾟдﾟ)")
             return
         }
-        if (total == 114514) || total == 364364 || total == 889464) {
-            customer.mute(Random.nextInt(1, 60) * 60)
-            event.group.sendMessage("以为我看不懂么，爬！( `д´)")
-            return
-        }
+      
         // Now, complete the order
         customer.mute(timeNum)
         event.group.sendMessage("欢迎使用禁言套餐，您的餐齐了，请慢用")
