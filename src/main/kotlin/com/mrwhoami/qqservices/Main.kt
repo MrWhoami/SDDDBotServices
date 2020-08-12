@@ -24,6 +24,7 @@ suspend fun main() {
     val muteMenu = MuteMenu()
     val qAndA = QuestionAnswer()
     val welcome = Welcome(miraiBot.groups)
+    val groupDaily = GroupDaily()
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
@@ -32,7 +33,7 @@ suspend fun main() {
         muteMenu.onGrpMsg(it)
         qAndA.onGrpMsg(it)
         welcome.onGrpMsg(it)
-
+        groupDaily.onGrpMsg(it)
     }
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
