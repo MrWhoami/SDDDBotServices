@@ -11,7 +11,7 @@ class QuestionAnswer {
     private val disabledInGroup = listOf(1094098748L)
 
     private fun containsBotName(msgContent : String) : Boolean{
-         return msgContent.contains("bot") || msgContent.contains("Bot") || msgContent.contains("BOT") || msgContent.contains("波特") || msgContent.contains("机器人")
+        return msgContent.contains("bot") || msgContent.contains("Bot") || msgContent.contains("BOT") || msgContent.contains("波特") || msgContent.contains("机器人")
     }
 
     private fun getPlainText(messageChain : MessageChain) : String? {
