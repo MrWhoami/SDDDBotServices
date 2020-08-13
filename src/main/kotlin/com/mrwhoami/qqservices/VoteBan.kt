@@ -1,7 +1,6 @@
 package com.mrwhoami.qqservices
 
 import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.at
@@ -58,7 +57,7 @@ class VoteBan {
             return
         }
         val target = event.group[targetId]
-        if (event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L) {
+        if (BotHelper.memberIsAdmin(target)) {
             event.group.sendMessage("啊这")
             return
         }

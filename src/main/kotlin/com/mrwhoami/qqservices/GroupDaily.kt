@@ -3,8 +3,6 @@ package com.mrwhoami.qqservices
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.sync.Mutex
 import mu.KotlinLogging
-import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.data.content
@@ -154,7 +152,7 @@ class GroupDaily {
         }
         // If the sender is trying to Modify the daily.
         if (event.message.content == "#更新日报") {
-            if (!(event.sender.isAdministrator() || event.sender.isOwner() || event.sender.id == 844548205L)) return
+            if (!BotHelper.memberIsAdmin(event.sender)) return
             if (grpIsUpdating(event.group.id)) {
                 event.group.sendMessage(event.sender.at() + "其他管理员正在更新群日报")
                 return

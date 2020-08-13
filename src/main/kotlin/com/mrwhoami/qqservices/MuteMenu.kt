@@ -2,7 +2,6 @@ package com.mrwhoami.qqservices
 
 import mu.KotlinLogging
 import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 
@@ -26,7 +25,7 @@ class MuteMenu {
         }
         val customer = event.sender
         // Check for the privilege
-        if (customer.isAdministrator() || customer.isOwner()) {
+        if (BotHelper.memberIsAdmin(customer)) {
             event.group.sendMessage(customer.at() + "你太强了，这个套餐不适合你，还是另请高明吧")
             return
         }

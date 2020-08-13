@@ -1,7 +1,6 @@
 package com.mrwhoami.qqservices
 
 import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.contact.isOwner
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.sendImage
@@ -11,7 +10,9 @@ class QuestionAnswer {
     private val disabledInGroup = listOf(1094098748L)
 
     private fun containsBotName(msgContent : String) : Boolean{
-        return msgContent.contains("bot") || msgContent.contains("Bot") || msgContent.contains("BOT") || msgContent.contains("波特") || msgContent.contains("机器人")
+        return msgContent.contains("bot") || msgContent.contains("Bot") ||
+                msgContent.contains("BOT") || msgContent.contains("波特") ||
+                msgContent.contains("机器人")
     }
 
     private fun getPlainText(messageChain : MessageChain) : String? {
@@ -48,7 +49,7 @@ class QuestionAnswer {
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
-                if (event.sender.isAdministrator() || event.sender.isOwner()) {
+                if (BotHelper.memberIsAdmin(event.sender)) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
                 } else {
                     if (grp.botPermission.isAdministrator()) {

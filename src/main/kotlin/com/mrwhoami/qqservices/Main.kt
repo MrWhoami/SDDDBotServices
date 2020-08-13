@@ -18,6 +18,8 @@ suspend fun main() {
     }.alsoLogin()
     logger.info { "${login.qqId} is logged in." }
 
+    // Initialize helper
+    BotHelper.loadConfig()
     // Initialize services
     val repeater = Repeater()
     val voteBan = VoteBan()
@@ -25,6 +27,8 @@ suspend fun main() {
     val qAndA = QuestionAnswer()
     val welcome = Welcome(miraiBot.groups)
     val groupDaily = GroupDaily()
+
+    logger.info { "Initialization finished." }
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
