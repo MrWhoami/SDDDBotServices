@@ -68,9 +68,9 @@ class QuestionAnswer {
                                             msgContent.contains("曰我")) -> {
                 grp.sendMessage("你不对劲，你有问题，你快点爬(`ヮ´ )")
             }
-            containsBotName(msgContent) && (msgContent.contains("有") ||
-                                            msgContent.contains("能") ||
-                                            msgContent.contains("可以")) -> {
+            containsBotName(msgContent) && (msgContent.contains("能") ||
+                                            msgContent.contains("可以") ||
+                    ((msgContent.contains("有没有") || msgContent.contains("吗")) && msgContent.contains("功能"))) -> {
                 grp.sendMessage("你来帮我码代码就有了\nhttps://github.com/MrWhoami/SDDDBotServices")
             }
             containsBotName(msgContent) && msgContent.contains("活着") -> {
