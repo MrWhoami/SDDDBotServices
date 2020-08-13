@@ -42,7 +42,7 @@ class MuteMenu {
         // Parse time and check.
         val time = msgContent.filter { it.isDigit() }
         var timeNum = -1
-        if (time.isEmpty() || time.length > 5) {
+        if (time.isEmpty() || time.length > 6) {
             val timeChar = mapOf<Char, Int>(
                 Pair('一', 1), Pair('二', 2), Pair('两', 2), Pair('俩', 2), Pair('三', 3),
                 Pair('四', 4), Pair('五', 5), Pair('六', 6),
