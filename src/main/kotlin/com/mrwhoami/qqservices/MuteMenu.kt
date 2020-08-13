@@ -42,7 +42,7 @@ class MuteMenu {
         // Parse time and check.
         val time = msgContent.filter { it.isDigit() }
         var timeNum = -1
-        if (time.isEmpty() || time.length > 5) {
+        if (time.isEmpty() || time.length > 6) {
             val timeChar = mapOf<Char, Int>(
                 Pair('一', 1), Pair('二', 2), Pair('两', 2), Pair('俩', 2), Pair('三', 3),
                 Pair('四', 4), Pair('五', 5), Pair('六', 6),
@@ -74,6 +74,11 @@ class MuteMenu {
             }
         }
         else timeNum = time.toInt() * scale
+        if (time.toInt() == 114514 || time.toInt() == 364364 || time.toInt() == 889464) {
+            customer.mute(1200)
+            event.group.sendMessage("大臭猪以为我看不懂么，爬！( `д´)")
+            return
+        }
         if (timeNum < 0 || timeNum >= 2592000) {
             event.group.sendMessage(customer.at() + "你这个时间不对劲")
             return
