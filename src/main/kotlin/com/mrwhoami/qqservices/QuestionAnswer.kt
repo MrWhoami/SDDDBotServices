@@ -58,6 +58,12 @@ class QuestionAnswer {
                     grp.sendMessage("大臭猪你爬( `д´)")
                 }
             }
+            containsBotName(msgContent) && msgContent.contains("傻") -> {
+                    grp.sendMessage("人家才不傻！(>д<)")
+            }
+            containsBotName(msgContent) && msgContent.contains("可爱")  -> {
+                grp.sendMessage("欸嘿~(*ﾟ∀ﾟ*)")
+            }
             containsBotName(msgContent) && (msgContent.contains("亲亲") ||
                                             msgContent.contains("啾啾") ||
                                             msgContent.contains("mua")) -> {
