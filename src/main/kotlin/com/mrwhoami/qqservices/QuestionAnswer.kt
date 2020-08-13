@@ -48,7 +48,7 @@ class QuestionAnswer {
             containsBotName(msgContent) && msgContent.contains("傻") -> {
                     grp.sendMessage("人家才不傻！(>д<)")
             }
-            containsBotName(msgContent) && (msgContent.contains("可爱")  -> {
+            containsBotName(msgContent) && msgContent.contains("可爱")  -> {
                 grp.sendMessage("欸嘿~(*ﾟ∀ﾟ*)")
             }
             containsBotName(msgContent) && (msgContent.contains("亲亲") ||
