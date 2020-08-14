@@ -1,5 +1,9 @@
 package com.mrwhoami.qqservices
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.alsoLogin
@@ -42,6 +46,23 @@ suspend fun main() {
 
     miraiBot.subscribeAlways<MemberJoinEvent> {
         welcome.onMemberJoin(it)
+    }
+
+    // Check per minute
+    GlobalScope.launch {
+        while (miraiBot.isActive) {
+            logger.info { "1-min heart beat event." }
+            delay(60 * 1000L)
+        }
+    }
+
+    // Check per hour
+    GlobalScope.launch {
+        while (miraiBot.isActive) {
+            logger.info { "1-hour heart beat event." }
+            groupDaily.onHourWake(miraiBot)
+            delay(60 * 60 * 1000L)
+        }
     }
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出

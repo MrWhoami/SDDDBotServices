@@ -3,6 +3,7 @@ package com.mrwhoami.qqservices
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.sync.Mutex
 import mu.KotlinLogging
+import net.mamoe.mirai.Bot
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.data.content
@@ -22,17 +23,18 @@ class GroupDaily {
     // Updating related logic
     private var grp2Buffer: MutableMap<Long, String> = mutableMapOf()
     private var grp2Admin: HashMap<Long, Long> = hashMapOf()
+    private var hourCounter = 0
     private var lock = Mutex()
 
-    fun grpIsUpdating(grpId: Long): Boolean {
+    private fun grpIsUpdating(grpId: Long): Boolean {
         return grp2Admin.containsKey(grpId)
     }
 
-    fun grpIsUpdatingBy(grpId: Long, usrId: Long): Boolean {
+    private fun grpIsUpdatingBy(grpId: Long, usrId: Long): Boolean {
         return grp2Admin.containsKey(grpId) && grp2Admin[grpId] == usrId
     }
 
-    suspend fun grpSetUpdatingBy(grpId: Long, usrId: Long): Boolean {
+    private suspend fun grpSetUpdatingBy(grpId: Long, usrId: Long): Boolean {
         lock.lock()
         if (grp2Admin.containsKey(grpId)) {
             val status = grp2Admin[grpId] == usrId
@@ -44,7 +46,7 @@ class GroupDaily {
         return true
     }
 
-    suspend fun grpUpdate(grpId: Long, usrId: Long, message: String): Boolean {
+    private suspend fun grpUpdate(grpId: Long, usrId: Long, message: String): Boolean {
         lock.lock()
         if (!grp2Admin.containsKey(grpId) || grp2Admin[grpId] != usrId) {
             lock.unlock()
@@ -52,6 +54,18 @@ class GroupDaily {
         }
         grp2Msg[grpId] = message
         grp2Admin.remove(grpId)
+        saveMapToJson()
+        lock.unlock()
+        return true
+    }
+
+    private suspend fun grpClear(grpId: Long) : Boolean {
+        lock.lock()
+        if (grp2Admin.containsKey(grpId) || !grp2Msg.contains(grpId)) {
+            lock.unlock()
+            return false
+        }
+        grp2Msg.remove(grpId)
         saveMapToJson()
         lock.unlock()
         return true
@@ -147,7 +161,7 @@ class GroupDaily {
         if (event.message.content.contains("日报") && (
                     event.message.content.contains("怎么用") || event.message.content.contains("帮助"))
         ) {
-            event.group.sendMessage(event.sender.at() + "查看日报\n#更新日报")
+            event.group.sendMessage(event.sender.at() + "查看日报\n#更新日报\n#清空日报")
             return
         }
         // If the sender is trying to Modify the daily.
@@ -166,6 +180,16 @@ class GroupDaily {
             return
         }
         // If the sender is trying to Clear the daily.
+        if (event.message.content == "#清空日报") {
+            if (!BotHelper.memberIsAdmin(event.sender)) return
+            val result = grpClear(event.group.id)
+            if (result) {
+                event.group.sendMessage(event.sender.at() + "本群日报已清空")
+            } else {
+                event.group.sendMessage(event.sender.at() + "群日报清空失败：1.机器人正忙；2.其他管理员正在更新日报；3.本群根本就没有日报")
+            }
+            return
+        }
         // Special command
         if (event.sender.id == 844548205L) {
             if (event.message.content == "#复位状态") {
@@ -177,5 +201,18 @@ class GroupDaily {
         }
         // No command
         return
+    }
+
+    // Accumulate every 8 hour.
+    suspend fun onHourWake(bot : Bot) {
+        if (hourCounter == 8) hourCounter = 0
+        if (hourCounter == 0) {
+            for (group in bot.groups) {
+                if (grp2Msg.contains(group.id)) {
+                    group.sendMessage(grp2Msg[group.id]!!)
+                }
+            }
+        }
+        hourCounter += 1
     }
 }
