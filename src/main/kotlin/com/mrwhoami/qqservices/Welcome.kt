@@ -32,6 +32,7 @@ class Welcome (groupList : ContactList<Group>){
     private val resPath : Path = FileSystems.getDefault().getPath("res", "Welcome")
 
     init {
+        BotHelper.registerFunctions("进群欢迎", emptyList())
         val groupIdList = groupList.map { it.id }
         if (Files.exists(resPath)) {
             for (groupId in groupIdList) {

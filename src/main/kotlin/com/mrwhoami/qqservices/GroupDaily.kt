@@ -21,10 +21,13 @@ class GroupDaily {
     private var grp2Msg: MutableMap<Long, String> = mutableMapOf()
 
     // Updating related logic
-    private var grp2Buffer: MutableMap<Long, String> = mutableMapOf()
     private var grp2Admin: HashMap<Long, Long> = hashMapOf()
     private var hourCounter = 0
     private var lock = Mutex()
+
+    init {
+        BotHelper.registerFunctions("群日报", listOf("查看日报", "#更新日报", "#清空日报", "#复位状态"))
+    }
 
     private fun grpIsUpdating(grpId: Long): Boolean {
         return grp2Admin.containsKey(grpId)
@@ -157,13 +160,6 @@ class GroupDaily {
             }
             return
         }
-        // If the sender is try to get help,
-        if (event.message.content.contains("日报") && (
-                    event.message.content.contains("怎么用") || event.message.content.contains("帮助"))
-        ) {
-            event.group.sendMessage(event.sender.at() + "查看日报\n#更新日报\n#清空日报")
-            return
-        }
         // If the sender is trying to Modify the daily.
         if (event.message.content == "#更新日报") {
             if (!BotHelper.memberIsAdmin(event.sender)) return
@@ -191,7 +187,7 @@ class GroupDaily {
             return
         }
         // Special command
-        if (event.sender.id == 844548205L) {
+        if (BotHelper.memberIsBotOwner(event.sender)) {
             if (event.message.content == "#复位状态") {
                 lock.tryLock()
                 grp2Admin.clear()

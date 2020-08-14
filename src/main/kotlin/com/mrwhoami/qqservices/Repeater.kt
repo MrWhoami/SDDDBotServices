@@ -13,6 +13,10 @@ class Repeater {
     )
     private var grp2Buffer = hashMapOf<Long, RepeaterBuffer>()
 
+    init {
+        BotHelper.registerFunctions("复读机", emptyList())
+    }
+
     private fun message2MiraiCode(message: MessageChain): String? {
         var buffer = ""
         for (msg in message) {

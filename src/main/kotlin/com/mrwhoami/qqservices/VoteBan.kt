@@ -15,6 +15,9 @@ class VoteBan {
             var lastTime : Instant = Instant.now()
     )
 
+    init {
+        BotHelper.registerFunctions("投票禁言", listOf("口他 @xxx"))
+    }
     private val disabledInGroup = listOf(1094098748L)
     private var grp2Buffer = hashMapOf<Pair<Long, Long>, VoteBuffer>()
     private var usrId2LastVoteTime = hashMapOf<Long, Instant>()

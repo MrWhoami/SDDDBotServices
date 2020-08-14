@@ -88,7 +88,7 @@ class QuestionAnswer {
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
             msgContent.contains("功能列表") -> {
-                grp.sendMessage("投票禁言 - 口水母\n禁言套餐 - 我要休息/口我x分钟/小时\n精致睡眠 - 给我精致睡眠/水母\n复读机\nQ&A")
+                grp.sendMessage(BotHelper.functionsToString(event.group.id))
             }
             containsBotName(msgContent) -> {
                 val answers = listOf(

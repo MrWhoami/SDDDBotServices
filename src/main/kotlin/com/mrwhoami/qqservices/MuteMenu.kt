@@ -8,6 +8,10 @@ import net.mamoe.mirai.message.data.*
 class MuteMenu {
     private val logger = KotlinLogging.logger {}
 
+    init {
+        BotHelper.registerFunctions("禁言套餐", listOf("我要休息x分钟", "我要休息x小时"))
+    }
+
     suspend fun onGrpMsg (event: GroupMessageEvent) {
         // Check if the bot is a admin in the group
         if (! event.group.botAsMember.isAdministrator() ){
