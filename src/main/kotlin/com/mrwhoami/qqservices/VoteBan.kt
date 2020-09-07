@@ -43,15 +43,13 @@ class VoteBan {
             usrId2LastVoteTime[voterId] = now
         }
         // Get the target.
-        val targetId = if (msg.content.contains("口水母")) {
-            1260775699L
-        } else {
-            val tmp = event.message[At]?.target
-            if (tmp == null) {
+        val targetId = when {
+            event.message[At] != null -> event.message[At]!!.target
+            msg.content.contains("口水母") -> 1260775699L
+            else -> {
                 event.group.sendMessage("请指定一个投票目标")
                 return
             }
-            tmp
         }
         val targetPair = Pair(groupId, targetId)
         // Check if the target is actually in the group and mutable

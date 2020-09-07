@@ -72,8 +72,8 @@ class MuteMenu {
                 if (total > 0) timeNum = total * scale
             }
             else {
-                event.group.sendMessage(customer.at() + "你这个时间不对劲")
-                return
+                event.group.sendMessage(customer.at() + "你这个时间不对劲，我看不懂，先来24小时吧")
+                timeNum = 24 * 60 * 60
             }
         }
         else timeNum = time.toInt() * scale
@@ -83,8 +83,8 @@ class MuteMenu {
             return
         }
         if (timeNum < 0 || timeNum >= 2592000) {
-            event.group.sendMessage(customer.at() + "你这个时间不对劲")
-            return
+            event.group.sendMessage(customer.at() + "你这个时间太长了，先来24小时吧")
+            timeNum = 24 * 60 * 60
         }
         if (timeNum == 0) {
             event.group.sendMessage("不点餐在这玩什么呢(|||ﾟдﾟ)")
