@@ -44,8 +44,8 @@ class VoteBan {
         }
         // Get the target.
         val targetId = when {
-            event.message[At] != null -> event.message[At]!!.target
             msg.content.contains("口水母") -> 1260775699L
+            event.message[At] != null -> event.message[At]!!.target
             else -> {
                 event.group.sendMessage("请指定一个投票目标")
                 return
