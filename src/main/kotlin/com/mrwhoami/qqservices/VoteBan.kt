@@ -51,17 +51,32 @@ class VoteBan {
                 return
             }
         }
-        val targetPair = Pair(groupId, targetId)
+
         // Check if the target is actually in the group and mutable
-        if (!event.group.members.contains(targetId)) {
+        if (event.bot.id == targetId) {
+            if (BotHelper.memberIsAdmin(event.sender)) {
+                event.group.sendMessage("求求你不要这样")
+                return
+            } else {
+                val timeLength = Random.nextInt(10, 41)
+                event.group.sendMessage(voter.at() + "谁给你的勇气口我！休息 $timeLength 分钟吧！")
+                voter.mute(timeLength * 60)
+                return
+            }
+        } else if (!event.group.members.contains(targetId)) {
             event.group.sendMessage("$targetId 并不在群内")
             return
         }
-        val target = event.group[targetId]
-        if (BotHelper.memberIsAdmin(target)) {
-            event.group.sendMessage("啊这")
+        var target = event.group[targetId]
+        if (BotHelper.memberIsAdmin(target) && BotHelper.memberIsAdmin(voter)) {
+            event.group.sendMessage("你们不要再打啦~")
             return
         }
+        if (BotHelper.memberIsAdmin(target)) {
+            event.group.sendMessage("啊这……目标出了反甲……")
+            target = voter
+        }
+        val targetPair = Pair(groupId, target.id)
         // Check if target already exists
         if (!grp2Buffer.containsKey(targetPair)) {
             grp2Buffer[targetPair] = VoteBuffer(hashSetOf(voterId), now)

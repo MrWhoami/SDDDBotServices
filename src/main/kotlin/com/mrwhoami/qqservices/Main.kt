@@ -31,11 +31,13 @@ suspend fun main() {
     val qAndA = QuestionAnswer()
     val welcome = Welcome(miraiBot.groups)
     val groupDaily = GroupDaily()
+    val rng = RandomNumberGenerator()
 
     logger.info { "Initialization finished." }
 
     miraiBot.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
+        rng.onGrpMsg(it)
         repeater.onGrpMsg(it)
         voteBan.onGrpMsg(it)
         muteMenu.onGrpMsg(it)
