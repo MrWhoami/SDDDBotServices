@@ -38,7 +38,7 @@ class QuestionAnswer {
             msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
             msgContent.contains("老婆") -> {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
-                grp.sendImage(picture)
+                grp.sendImage(picture.openStream())
             }
             msgContent == "给我精致睡眠" ||
             msgContent == "给我精致水母" ||
@@ -105,7 +105,7 @@ class QuestionAnswer {
                     grp.sendMessage(answers[idx])
                 } else {
                     val picture = this::class.java.getResource(picAnswer[-idx - 1])
-                    grp.sendImage(picture)
+                    grp.sendImage(picture.openStream())
                 }
             }
         }

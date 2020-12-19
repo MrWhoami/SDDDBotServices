@@ -1,6 +1,7 @@
 package com.mrwhoami.qqservices
 
 import net.mamoe.mirai.contact.isAdministrator
+import net.mamoe.mirai.contact.isMuted
 import net.mamoe.mirai.message.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.at
@@ -11,7 +12,7 @@ import kotlin.random.Random
 
 class VoteBan {
     data class VoteBuffer (
-            var voters : HashSet<Long> = hashSetOf(),
+            var voter_count : Int = 0,
             var lastTime : Instant = Instant.now()
     )
 
@@ -31,12 +32,14 @@ class VoteBan {
         val voterId = voter.id
 
         val msg = event.message
-        if (!(msg.content.contains("口水母") || msg.content.contains("口他"))) {
+        if (!(msg.content.contains("口他") || msg.content.contains("口水母") ||
+                    msg.content.contains("口时雨") || msg.content.contains("口熊猫"))) {
             return
         }
         // Check voter time
         val now = Instant.now()
-        if (usrId2LastVoteTime.containsKey(voterId) && Duration.between(usrId2LastVoteTime[voterId], now).toMinutes() < 15) {
+        if (!BotHelper.memberIsAdmin(voter) && usrId2LastVoteTime.containsKey(voterId) &&
+                Duration.between(usrId2LastVoteTime[voterId], now).toMinutes() < 15) {
             event.group.sendMessage(voter.at() + "你在15分钟内投过票了。")
             return
         } else {
@@ -46,6 +49,8 @@ class VoteBan {
         val targetId = when {
             event.message[At] != null -> event.message[At]!!.target
             msg.content.contains("口水母") -> 1260775699L
+            msg.content.contains("口时雨") -> 1094829199L
+            msg.content.contains("口熊猫") -> 441702144L
             else -> {
                 event.group.sendMessage("请指定一个投票目标")
                 return
@@ -79,28 +84,40 @@ class VoteBan {
         val targetPair = Pair(groupId, target.id)
         // Check if target already exists
         if (!grp2Buffer.containsKey(targetPair)) {
-            grp2Buffer[targetPair] = VoteBuffer(hashSetOf(voterId), now)
-            event.group.sendMessage(target.at() + "你已经被投 1 票，15分钟集齐3票即可获得10~40分钟随机口球一份！")
+            grp2Buffer[targetPair] = VoteBuffer(1, now)
+            event.group.sendMessage(target.at() + "你已经被投 1 票，15分钟集齐3票即可获得10~20分钟随机口球一份！")
             return
         } else {
             val buffer = grp2Buffer[targetPair]!!
             // Check the buffer timeout. If so, clear it first.
             val duration = Duration.between(buffer.lastTime, now)
             if (duration.toMinutes() > 15L) {
-                buffer.voters.clear()
+                buffer.voter_count = 0
                 buffer.lastTime = now
             }
             // If vote count meet criteria, ban the user, output a message and clear the buffer.
-            buffer.voters.add(voterId)
+            buffer.voter_count += 1
             buffer.lastTime = now
-            if (buffer.voters.size >= 3) {
-                buffer.voters.clear()
-                val timeLength = Random.nextInt(10, 41)
-                event.group.sendMessage(target.at() + "大成功~休息 $timeLength 分钟吧！")
-                target.mute(timeLength * 60)
+            if (buffer.voter_count >= 3) {
+                buffer.voter_count = 0
+                val timeLength = Random.nextInt(10, 21) * 60
+                // Check for time accumulation
+                if (target.isMuted || target.muteTimeRemaining > 0) {
+                    var timeRemaining = target.muteTimeRemaining + timeLength
+                    if (timeRemaining > 2 * 60 * 60) {
+                        timeRemaining = 2 * 60 * 60
+                        event.group.sendMessage(target.at() + "啊~好惨啊~算了就休息两小时吧！")
+                    } else {
+                        event.group.sendMessage(target.at() + "再多休息 ${timeLength / 60} 分钟~")
+                    }
+                    target.mute(timeRemaining)
+                } else {
+                    event.group.sendMessage(target.at() + "大成功~休息 ${timeLength / 60} 分钟吧！")
+                    target.mute(timeLength)
+                }
                 return
             } else {
-                event.group.sendMessage(target.at() + "你已经被投 ${buffer.voters.size} 票，15分钟集齐3票即可获得10~40分钟随机口球一份！")
+                event.group.sendMessage(target.at() + "你已经被投 ${buffer.voter_count} 票，15分钟集齐3票即可获得10~20分钟随机口球一份！")
                 return
             }
         }

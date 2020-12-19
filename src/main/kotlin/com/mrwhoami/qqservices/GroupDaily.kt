@@ -152,7 +152,7 @@ class GroupDaily {
             return
         }
         // If the sender is trying to get the daily, just return it if available.
-        if (event.message.content.contains("查看日报")) {
+        if (event.message.content.contains("查看日报") || event.message.content.contains("下载链接")) {
             if (grp2Msg.containsKey(event.group.id)) {
                 event.group.sendMessage(event.sender.at() + grp2Msg[event.group.id]!!)
             } else {
