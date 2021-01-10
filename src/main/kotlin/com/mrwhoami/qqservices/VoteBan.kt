@@ -25,7 +25,7 @@ class VoteBan {
 
     suspend fun onGrpMsg(event: GroupMessageEvent) {
         if (disabledInGroup.contains(event.group.id)) return
-        if (!event.group.botPermission.isAdministrator()) return
+
         // Check if this is a ban vote message.
         val groupId = event.group.id
         val voter = event.sender
@@ -34,6 +34,10 @@ class VoteBan {
         val msg = event.message
         if (!(msg.content.contains("口他") || msg.content.contains("口水母") ||
                     msg.content.contains("口时雨") || msg.content.contains("口熊猫"))) {
+            return
+        }
+        if (!event.group.botPermission.isAdministrator()) {
+            event.group.sendMessage("没权限我也没办法~")
             return
         }
         // Check voter time
@@ -99,7 +103,9 @@ class VoteBan {
             buffer.voter_count += 1
             buffer.lastTime = now
             if (buffer.voter_count >= 3) {
+                // Ban is confirmed. clear the buffer.
                 buffer.voter_count = 0
+                // Get the random time in seconds
                 val timeLength = Random.nextInt(10, 21) * 60
                 // Check for time accumulation
                 if (target.isMuted || target.muteTimeRemaining > 0) {

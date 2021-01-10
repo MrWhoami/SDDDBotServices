@@ -45,7 +45,9 @@ class QuestionAnswer {
             msgContent == "我想梦到花花" ||
             msgContent == "我要梦到花花" ||
             msgContent == "我现在就要梦到花花" -> {
-                event.sender.mute(7 * 60 * 60)
+                if (event.group.botPermission.isAdministrator()) {
+                    event.sender.mute(7 * 60 * 60)
+                }
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
@@ -98,6 +100,8 @@ class QuestionAnswer {
                 )
                 val picAnswer = listOf(
                         "/QuestionAnswer/hina_sdys.jpg",
+                        "/QuestionAnswer/hina_diantou.gif",
+                        "/QuestionAnswer/hina_what.gif",
                         "/QuestionAnswer/kaf_question.jpg"
                 )
                 val idx = Random.nextInt(-picAnswer.size, answers.size)
