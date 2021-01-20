@@ -75,7 +75,9 @@ class VoteBan {
         } else if (!event.group.members.contains(targetId)) {
             event.group.sendMessage("$targetId 并不在群内")
             return
-        }
+        } else if (targetId == 4050909L) { // Save NTR
+            event.group.sendMessage("NTR天下第一")
+            return
         var target = event.group[targetId]
         if (BotHelper.memberIsAdmin(target) && BotHelper.memberIsAdmin(voter)) {
             event.group.sendMessage("你们不要再打啦~")
