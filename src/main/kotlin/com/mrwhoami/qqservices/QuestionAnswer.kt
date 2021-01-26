@@ -50,6 +50,12 @@ class QuestionAnswer {
                 }
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
+            msgContent == "呐" -> {
+                if (event.group.botPermission.isAdministrator()) {
+                    event.sender.mute(24 * 60 * 60)
+                }
+                grp.sendMessage("正義，執行！")
+            }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
