@@ -54,7 +54,10 @@ class VoteBan {
             event.message[At] != null -> event.message[At]!!.target
             msg.content.contains("口水母") -> 1260775699L
             msg.content.contains("口时雨") -> 1094829199L
+            msg.content.contains("口時雨") -> 1094829199L
             msg.content.contains("口熊猫") -> 441702144L
+            msg.content.contains("口熊貓") -> 441702144L
+            msg.content.contains("口maki") -> 374721531L
             else -> {
                 event.group.sendMessage("请指定一个投票目标")
                 return
