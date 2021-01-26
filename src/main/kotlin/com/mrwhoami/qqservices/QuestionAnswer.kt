@@ -40,6 +40,10 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture.openStream())
             }
+            msgContent.contains("我爱你") -> {
+                val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
+                grp.sendImage(picture.openStream())
+            }
             msgContent == "给我精致睡眠" ||
             msgContent == "给我精致水母" ||
             msgContent == "我想梦到花花" ||
