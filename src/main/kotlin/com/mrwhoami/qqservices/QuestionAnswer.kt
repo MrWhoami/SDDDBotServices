@@ -12,7 +12,7 @@ class QuestionAnswer {
     private fun containsBotName(msgContent : String) : Boolean{
         return msgContent.contains("bot") || msgContent.contains("Bot") ||
                 msgContent.contains("BOT") || msgContent.contains("波特") ||
-                msgContent.contains("机器人")
+                msgContent.contains("机器人") || msgContent.contains("機器人")
     }
 
     private fun getPlainText(messageChain : MessageChain) : String? {
@@ -40,15 +40,20 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture.openStream())
             }
-            msgContent.contains("我爱你") -> {
+            msgContent.contains("我爱你") || msgContent.contains("我愛你")-> {
                 val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
                 grp.sendImage(picture.openStream())
             }
             msgContent == "给我精致睡眠" ||
+            msgContent == "給我精緻睡眠" ||
             msgContent == "给我精致水母" ||
+            msgContent == "給我精緻水母" ||
             msgContent == "我想梦到花花" ||
+            msgContent == "我想夢到花花" ||
             msgContent == "我要梦到花花" ||
-            msgContent == "我现在就要梦到花花" -> {
+            msgContent == "我要夢到花花" ||
+            msgContent == "我现在就要梦到花花" ||
+            msgContent == "我現在就要夢到花花" -> {
                 if (event.group.botPermission.isAdministrator()) {
                     event.sender.mute(7 * 60 * 60)
                 }
@@ -71,7 +76,11 @@ class QuestionAnswer {
                 }
             }
             containsBotName(msgContent) && msgContent.contains("傻") -> {
-                    grp.sendMessage("人家才不傻！(>д<)")
+                if (BotHelper.memberIsAdmin(event.sender)) {
+                    grp.sendMessage("呜呜呜，別罵了( TдT)")
+                } else {
+                    grp.sendMessage("你才傻！你全家都傻！(　^ω^)")
+                }
             }
             containsBotName(msgContent) && msgContent.contains("可爱")  -> {
                 grp.sendMessage("欸嘿~(*ﾟ∀ﾟ*)")
