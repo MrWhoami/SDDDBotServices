@@ -40,6 +40,10 @@ class QuestionAnswer {
                 val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
                 grp.sendImage(picture.openStream())
             }
+            msgContent.contains("我爱你") -> {
+                val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
+                grp.sendImage(picture.openStream())
+            }
             msgContent == "给我精致睡眠" ||
             msgContent == "给我精致水母" ||
             msgContent == "我想梦到花花" ||
@@ -49,6 +53,12 @@ class QuestionAnswer {
                     event.sender.mute(7 * 60 * 60)
                 }
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
+            }
+            msgContent == "呐" -> {
+                if (event.group.id == 1033928478L && event.group.botPermission.isAdministrator()) {
+                    event.sender.mute(24 * 60 * 60)
+                }
+                grp.sendMessage("正義，執行！")
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
