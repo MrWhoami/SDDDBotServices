@@ -55,7 +55,7 @@ class QuestionAnswer {
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
             msgContent == "呐" -> {
-                if (event.group.botPermission.isAdministrator()) {
+                if (event.group.id == 1033928478L && event.group.botPermission.isAdministrator()) {
                     event.sender.mute(24 * 60 * 60)
                 }
                 grp.sendMessage("正義，執行！")
