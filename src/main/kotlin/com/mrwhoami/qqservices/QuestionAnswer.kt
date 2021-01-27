@@ -51,9 +51,7 @@ class QuestionAnswer {
             msgContent == "我想梦到花花" ||
             msgContent == "我想夢到花花" ||
             msgContent == "我要梦到花花" ||
-            msgContent == "我要夢到花花" ||
-            msgContent == "我现在就要梦到花花" ||
-            msgContent == "我現在就要夢到花花" -> {
+            msgContent == "我要夢到花花" -> {
                 if (event.group.botPermission.isAdministrator()) {
                     event.sender.mute(7 * 60 * 60)
                 }
