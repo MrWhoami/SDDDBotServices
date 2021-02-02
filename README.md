@@ -12,6 +12,6 @@ English: Just a bot service for fun. Based on Mirai.
 - [x] 关键词回复
 - [x] 投票禁言
 - [x] 自选禁言套餐
-- [ ] 群日报
+- [x] 群日报
 - [ ] RSS推送
 - [ ] 群管理

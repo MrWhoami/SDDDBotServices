@@ -1,12 +1,12 @@
 package com.mrwhoami.qqservices
 
+import net.mamoe.mirai.contact.Contact.Companion.uploadImage
 import net.mamoe.mirai.contact.ContactList
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.event.events.MemberJoinEvent
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.uploadImage
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Files
@@ -18,9 +18,9 @@ class Welcome (groupList : ContactList<Group>){
             private var picMessage : String?
     ) {
         suspend fun createMessageChain(botAsMember : Member) : MessageChain {
-            var msg : MessageChain = PlainText(txtMessage).asMessageChain()
+            var msg  = messageChainOf(PlainText(txtMessage))
             if (picMessage != null) {
-                msg += botAsMember.uploadImage(File(picMessage!!))
+                msg += botAsMember.group.uploadImage(File(picMessage!!))
             }
             return msg
         }

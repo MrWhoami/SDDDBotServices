@@ -1,8 +1,10 @@
 package com.mrwhoami.qqservices
 
+import net.mamoe.mirai.contact.AnonymousMember
+import net.mamoe.mirai.contact.NormalMember
 import net.mamoe.mirai.contact.isAdministrator
 import net.mamoe.mirai.contact.isMuted
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.at
 import net.mamoe.mirai.message.data.content
@@ -32,6 +34,10 @@ class VoteBan {
         val voterId = voter.id
 
         val msg = event.message
+        if (voter is AnonymousMember) {
+            event.group.sendMessage("藏头藏尾算什么好汉!")
+            return
+        }
         if (!(msg.content.contains("口他") || msg.content.contains("口水母") ||
                     msg.content.contains("口时雨") || msg.content.contains("口熊猫"))) {
             return
@@ -51,7 +57,7 @@ class VoteBan {
         }
         // Get the target.
         val targetId = when {
-            event.message[At] != null -> event.message[At]!!.target
+            event.message.filterIsInstance<At>().firstOrNull() != null -> event.message.filterIsInstance<At>().firstOrNull()!!.target
             msg.content.contains("口水母") -> 1260775699L
             msg.content.contains("口时雨") || msg.content.contains("口時雨") -> 1094829199L
             msg.content.contains("口熊猫") || msg.content.contains("口熊貓") -> 441702144L
@@ -77,14 +83,14 @@ class VoteBan {
             event.group.sendMessage("$targetId 并不在群内")
             return
         }
-        var target = event.group[targetId]
+        var target = event.group[targetId]!!
         if (BotHelper.memberIsAdmin(target) && BotHelper.memberIsAdmin(voter)) {
             event.group.sendMessage("你们不要再打啦~")
             return
         }
         if (BotHelper.memberIsAdmin(target)) {
             event.group.sendMessage("啊这……目标出了反甲……")
-            target = voter
+            target = voter as NormalMember
         }
         val targetPair = Pair(groupId, target.id)
         // Check if target already exists

@@ -1,9 +1,9 @@
 package com.mrwhoami.qqservices
 
+import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.sendImage
 import kotlin.random.Random
 
 class QuestionAnswer {
@@ -19,7 +19,7 @@ class QuestionAnswer {
         var buffer = ""
         for (msg in messageChain) {
             if (msg.isContentEmpty()) continue
-            else if (msg.isPlain()) {
+            else if (msg is PlainText) {
                 buffer += msg.content
             } else continue
         }
