@@ -10,6 +10,7 @@ repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
     jcenter()
+    maven { url = uri("https://dl.bintray.com/karlatemp/misc") }
 }
 
 dependencies {
@@ -19,6 +20,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.29'
     compile 'com.beust:klaxon:5.0.1'
+    runtimeOnly("net.mamoe:mirai-login-solver-selenium:1.0-dev-16")
 }
 
 sourceSets {

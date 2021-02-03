@@ -12,6 +12,14 @@ English: Just a bot service for fun. Based on Mirai.
 - [x] 关键词回复
 - [x] 投票禁言
 - [x] 自选禁言套餐
-- [x] 群日报
+- [x] 群日报 
+- [x] 随机数生成
+- [x] 进群欢迎
 - [ ] RSS推送
 - [ ] 群管理
+
+## Usage
+
+1. Fill in your QQ login information in `BotLoginInfo.kt`.
+2. Build the project using gradle.
+3. Run the compile jar with `java -jar SDDDBotService-*.jar`

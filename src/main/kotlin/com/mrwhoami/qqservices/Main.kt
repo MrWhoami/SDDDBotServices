@@ -7,12 +7,18 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MemberJoinEvent
 
 import net.mamoe.mirai.utils.BotConfiguration
+import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
 
 suspend fun main() {
     // Login QQ. Use another data class to avoid password tracking.
     val login = BotLoginInfo()
+    // Check it before using
+    if ((login.qqId == 0L) or (login.qqPassword.isEmpty())) {
+        logger.error { "You should provide your QQ ID and password first." }
+        exitProcess(1)
+    }
     val miraiBot = BotFactory.newBot(login.qqId, login.qqPassword) {
         fileBasedDeviceInfo("device.json")
         protocol = BotConfiguration.MiraiProtocol.ANDROID_PHONE
