@@ -35,15 +35,8 @@ class QuestionAnswer {
         val grp = event.group
 
         when {
+            // The order matters. Message related to ban should go first.
             msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
-            msgContent.contains("老婆") -> {
-                val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
-                grp.sendImage(picture.openStream())
-            }
-            msgContent.contains("我爱你") || msgContent.contains("我愛你")-> {
-                val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
-                grp.sendImage(picture.openStream())
-            }
             msgContent == "给我精致睡眠" ||
             msgContent == "給我精緻睡眠" ||
             msgContent == "给我精致水母" ||
@@ -57,11 +50,15 @@ class QuestionAnswer {
                 }
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
-            msgContent == "呐" -> {
-                if (event.group.id == 1033928478L && event.group.botPermission.isAdministrator()) {
+            msgContent.contains("呐") -> {
+                if (event.group.id == 1033928478L &&
+                    event.group.botPermission.isAdministrator() &&
+                    !BotHelper.memberIsAdmin(event.sender)) {
                     event.sender.mute(24 * 60 * 60)
+                    grp.sendMessage("正義，執行！")
+                } else {
+                    grp.sendMessage("不准口内！")
                 }
-                grp.sendMessage("正義，執行！")
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
@@ -73,15 +70,25 @@ class QuestionAnswer {
                     grp.sendMessage("大臭猪你爬( `д´)")
                 }
             }
-            containsBotName(msgContent) && msgContent.contains("傻") -> {
-                if (BotHelper.memberIsAdmin(event.sender)) {
-                    grp.sendMessage("呜呜呜，別罵了( TдT)")
-                } else {
-                    grp.sendMessage("你才傻！你全家都傻！(　^ω^)")
-                }
+            msgContent.contains("老婆") -> {
+                val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
+                grp.sendImage(picture.openStream())
+            }
+            msgContent.contains("我爱你") || msgContent.contains("我愛你")-> {
+                val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
+                grp.sendImage(picture.openStream())
             }
             containsBotName(msgContent) && msgContent.contains("可爱")  -> {
                 grp.sendMessage("欸嘿~(*ﾟ∀ﾟ*)")
+            }
+            containsBotName(msgContent) && msgContent.contains("傻") -> {
+                val answers = listOf(
+                    "呜呜呜，別罵了( TдT)",
+                    "人家才不傻！(>д<)",
+                    "你才傻！你全家都傻！(　^ω^)",
+                    "都是这破群害的！"
+                )
+                grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
             containsBotName(msgContent) && (msgContent.contains("亲亲") ||
                                             msgContent.contains("啾啾") ||
@@ -109,7 +116,7 @@ class QuestionAnswer {
             msgContent.contains("功能列表") -> {
                 grp.sendMessage(BotHelper.functionsToString(event.group.id))
             }
-            containsBotName(msgContent) -> {
+            containsBotName(msgContent)-> {
                 val answers = listOf(
                         "没事就别找我了",
                         "似乎听到了DD的声音",

@@ -38,8 +38,13 @@ class VoteBan {
             event.group.sendMessage("藏头藏尾算什么好汉!")
             return
         }
-        if (!(msg.content.contains("口他") || msg.content.contains("口水母") ||
-                    msg.content.contains("口时雨") || msg.content.contains("口熊猫"))) {
+        if (!(msg.content.contains("口他") ||
+                    msg.content.contains("口maki") ||
+                    msg.content.contains("口水母") ||
+                    msg.content.contains("口时雨") ||
+                    msg.content.contains("口時雨") ||
+                    msg.content.contains("口熊貓") ||
+                    msg.content.contains("口熊猫"))) {
             return
         }
         if (!event.group.botPermission.isAdministrator()) {
