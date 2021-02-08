@@ -50,11 +50,11 @@ class QuestionAnswer {
                 }
                 grp.sendMessage("大臭猪晚安(❁´◡`❁)")
             }
-            msgContent.contains("呐") -> {
+            msgContent.startsWith("呐") -> {
                 if (event.group.id == 1033928478L &&
                     event.group.botPermission.isAdministrator() &&
                     !BotHelper.memberIsAdmin(event.sender)) {
-                    event.sender.mute(24 * 60 * 60)
+                    event.sender.mute(Random.nextInt(1, 120) * 60)
                     grp.sendMessage("正義，執行！")
                 } else {
                     grp.sendMessage("不准口内！")

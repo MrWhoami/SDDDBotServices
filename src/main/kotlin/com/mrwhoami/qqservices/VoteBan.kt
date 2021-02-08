@@ -57,8 +57,6 @@ class VoteBan {
                 Duration.between(usrId2LastVoteTime[voterId], now).toMinutes() < 15) {
             event.group.sendMessage(voter.at() + "你在15分钟内投过票了。")
             return
-        } else {
-            usrId2LastVoteTime[voterId] = now
         }
         // Get the target.
         val targetId = when {
@@ -97,6 +95,8 @@ class VoteBan {
             event.group.sendMessage("啊这……目标出了反甲……")
             target = voter as NormalMember
         }
+        // Vote is going to be affective, record the time.
+        usrId2LastVoteTime[voterId] = now
         val targetPair = Pair(groupId, target.id)
         // Check if target already exists
         if (!grp2Buffer.containsKey(targetPair)) {
@@ -119,20 +119,8 @@ class VoteBan {
                 buffer.voter_count = 0
                 // Get the random time in seconds
                 val timeLength = Random.nextInt(10, 21) * 60
-                // Check for time accumulation
-                if (target.isMuted || target.muteTimeRemaining > 0) {
-                    var timeRemaining = target.muteTimeRemaining + timeLength
-                    if (timeRemaining > 2 * 60 * 60) {
-                        timeRemaining = 2 * 60 * 60
-                        event.group.sendMessage(target.at() + "啊~好惨啊~算了就休息两小时吧！")
-                    } else {
-                        event.group.sendMessage(target.at() + "再多休息 ${timeLength / 60} 分钟~")
-                    }
-                    target.mute(timeRemaining)
-                } else {
-                    event.group.sendMessage(target.at() + "大成功~休息 ${timeLength / 60} 分钟吧！")
-                    target.mute(timeLength)
-                }
+                event.group.sendMessage(target.at() + "大成功~休息 ${timeLength / 60} 分钟吧！")
+                target.mute(timeLength)
                 return
             } else {
                 event.group.sendMessage(target.at() + "你已经被投 ${buffer.voter_count} 票，15分钟集齐3票即可获得10~20分钟随机口球一份！")
