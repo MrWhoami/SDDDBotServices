@@ -31,7 +31,7 @@ class VoteBan {
         // Check if this is a ban vote message.
         val groupId = event.group.id
         val voter = event.sender
-        val voterId = voter.id
+        var voterId = voter.id
 
         val msg = event.message
         if (voter is AnonymousMember) {
@@ -94,6 +94,7 @@ class VoteBan {
         if (BotHelper.memberIsAdmin(target)) {
             event.group.sendMessage("啊这……目标出了反甲……")
             target = voter as NormalMember
+            voterId = 0L
         }
         // Vote is going to be affective, record the time.
         usrId2LastVoteTime[voterId] = now
