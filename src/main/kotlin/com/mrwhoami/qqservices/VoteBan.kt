@@ -40,6 +40,7 @@ class VoteBan {
         }
         if (!(msg.content.contains("口他") ||
                     msg.content.contains("口maki") ||
+                    msg.content.contains("口小旦") ||
                     msg.content.contains("口水母") ||
                     msg.content.contains("口时雨") ||
                     msg.content.contains("口時雨") ||
@@ -61,6 +62,7 @@ class VoteBan {
         // Get the target.
         val targetId = when {
             event.message.filterIsInstance<At>().firstOrNull() != null -> event.message.filterIsInstance<At>().firstOrNull()!!.target
+            msg.content.contains("口小旦") -> 875314086L
             msg.content.contains("口水母") -> 1260775699L
             msg.content.contains("口时雨") || msg.content.contains("口時雨") -> 1094829199L
             msg.content.contains("口熊猫") || msg.content.contains("口熊貓") -> 441702144L
