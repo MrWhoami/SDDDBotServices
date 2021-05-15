@@ -41,6 +41,27 @@ class QuestionAnswer {
             msgContent == "給我精緻睡眠" ||
             msgContent == "给我精致水母" ||
             msgContent == "給我精緻水母" ||
+
+            msgContent == "我想梦到koko" ||//五个一个不能少！
+            msgContent == "我想夢到koko" ||
+            msgContent == "我要梦到koko" ||
+            msgContent == "我要夢到koko" ||
+            
+            msgContent == "我想梦到情绪" ||
+            msgContent == "我想夢到情绪" ||
+            msgContent == "我要梦到情绪" ||
+            msgContent == "我要夢到情绪" ||
+
+            msgContent == "我想梦到理芽" ||
+            msgContent == "我想夢到理芽" ||
+            msgContent == "我要梦到理芽" ||
+            msgContent == "我要夢到理芽" ||
+
+            msgContent == "我想梦到火子姐" ||
+            msgContent == "我想夢到火子姐" ||
+            msgContent == "我要梦到火子姐" ||
+            msgContent == "我要夢到火子姐" ||
+
             msgContent == "我想梦到花花" ||
             msgContent == "我想夢到花花" ||
             msgContent == "我要梦到花花" ||
@@ -48,7 +69,24 @@ class QuestionAnswer {
                 if (event.group.botPermission.isAdministrator()) {
                     event.sender.mute(7 * 60 * 60)
                 }
-                grp.sendMessage("大臭猪晚安(❁´◡`❁)")
+                val answers = listOf(
+                    "大臭猪晚安(❁´◡`❁)",
+                    "尽想着别的女人！┭┮﹏┭┮",
+                    "我在梦里等你呦~(✿◡‿◡)",
+                    "好好休息吧，明天又是新的一天（゜▽＾*））"
+                )
+                grp.sendMessage(answers[Random.nextInt(answers.size)])
+            }
+            msgContent == "给我精致午睡" ||
+            msgContent == "給我精緻午睡" -> {
+                if (event.group.botPermission.isAdministrator()) {
+                    event.sender.mute(1 * 60 * 60)//一小时够了吧
+                }
+                val answers = listOf(
+                    "大臭猪午安(❁´◡`❁)",
+                    "一上午累坏了吧ヾ(^▽^*)))"
+                )
+                grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
             msgContent.startsWith("呐") -> {
                 if (event.group.id == 1033928478L &&
@@ -86,6 +124,7 @@ class QuestionAnswer {
                     "呜呜呜，別罵了( TдT)",
                     "人家才不傻！(>д<)",
                     "你才傻！你全家都傻！(　^ω^)",
+                    "不要欺负我～(　TロT)σ",
                     "都是这破群害的！"
                 )
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
