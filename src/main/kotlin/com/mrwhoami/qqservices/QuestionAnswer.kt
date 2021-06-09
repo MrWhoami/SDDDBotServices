@@ -62,7 +62,7 @@ class QuestionAnswer {
                 if (event.group.id == 1033928478L && event.group.botPermission.isAdministrator()) {
                     event.sender.mute(24 * 60 * 60)
                 }
-                grp.sendMessage("正義，執行！")
+                grp.sendMessage("正义，执行！")
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
