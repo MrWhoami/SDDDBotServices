@@ -88,12 +88,13 @@ class QuestionAnswer {
                 )
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
-            msgContent.startsWith("呐") -> {
+            msgContent.startsWith("呐") ||
+            msgContent.startsWith("吶") -> {
                 if (event.group.id == 1033928478L &&
                     event.group.botPermission.isAdministrator() &&
                     !BotHelper.memberIsAdmin(event.sender)) {
                     event.sender.mute(Random.nextInt(1, 120) * 60)
-                    grp.sendMessage("正義，執行！")
+                    grp.sendMessage("正义，执行！")
                 } else {
                     grp.sendMessage("不准口内！")
                 }
@@ -121,7 +122,7 @@ class QuestionAnswer {
             }
             containsBotName(msgContent) && msgContent.contains("傻") -> {
                 val answers = listOf(
-                    "呜呜呜，別罵了( TдT)",
+                    "呜呜呜，別骂了( TдT)",
                     "人家才不傻！(>д<)",
                     "你才傻！你全家都傻！(　^ω^)",
                     "不要欺负我～(　TロT)σ",
