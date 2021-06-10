@@ -34,7 +34,7 @@ class QuestionAnswer {
         val msgContent = getPlainText(msg) ?: return
         val grp = event.group
 
-         when {
+        when {
             // The order matters. Message related to ban should go first.
             msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
             msgContent == "给我精致睡眠" ||
