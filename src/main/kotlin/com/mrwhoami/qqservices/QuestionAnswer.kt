@@ -77,12 +77,6 @@ class QuestionAnswer {
                 )
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
-            msgContent == "呐" ||
-            msgContent == "吶" -> {
-                if (event.group.id == 1033928478L && event.group.botPermission.isAdministrator()) {
-                    event.sender.mute(24 * 60 * 60)
-                }
-                grp.sendMessage("正义，执行！")
             msgContent == "给我精致午睡" ||
             msgContent == "給我精緻午睡" -> {
                 if (event.group.botPermission.isAdministrator()) {
@@ -93,6 +87,17 @@ class QuestionAnswer {
                     "一上午累坏了吧ヾ(^▽^*)))"
                 )
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
+            }
+            msgContent.startsWith("呐") ||
+            msgContent.startsWith("吶") -> {
+                if (event.group.id == 1033928478L &&
+                    event.group.botPermission.isAdministrator() &&
+                    !BotHelper.memberIsAdmin(event.sender)) {
+                    event.sender.mute(Random.nextInt(1, 120) * 60)
+                    grp.sendMessage("正义，执行！")
+                } else {
+                    grp.sendMessage("不准口内！")
+                }
             }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
