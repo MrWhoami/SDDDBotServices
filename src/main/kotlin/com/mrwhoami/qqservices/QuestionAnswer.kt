@@ -34,22 +34,14 @@ class QuestionAnswer {
         val msgContent = getPlainText(msg) ?: return
         val grp = event.group
 
-        when {
+         when {
             // The order matters. Message related to ban should go first.
             msgContent.contains("zaima") -> grp.sendMessage("buzai, cmn (　^ω^)")
-            msgContent.contains("老婆") -> {
-                val picture = this::class.java.getResource("/QuestionAnswer/sjb_fsnrjsnlpm.jpg")
-                grp.sendImage(picture.openStream())
-            }
-            msgContent.contains("我爱你") || msgContent.contains("我愛你")-> {
-                val picture = this::class.java.getResource("/QuestionAnswer/love.jpg")
-                grp.sendImage(picture.openStream())
-            }
             msgContent == "给我精致睡眠" ||
             msgContent == "給我精緻睡眠" ||
             msgContent == "给我精致水母" ||
             msgContent == "給我精緻水母" ||
-          
+
             msgContent == "我想梦到koko" ||//五个一个不能少！
             msgContent == "我想夢到koko" ||
             msgContent == "我要梦到koko" ||
@@ -125,7 +117,7 @@ class QuestionAnswer {
             }
             containsBotName(msgContent) && msgContent.contains("傻") -> {
                 val answers = listOf(
-                    "呜呜呜，別罵了( TдT)",
+                    "呜呜呜，別骂了( TдT)",
                     "人家才不傻！(>д<)",
                     "你才傻！你全家都傻！(　^ω^)",
                     "不要欺负我～(　TロT)σ",
