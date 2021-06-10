@@ -4,7 +4,7 @@ import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.sync.Mutex
 import mu.KotlinLogging
 import net.mamoe.mirai.Bot
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.data.content
 import java.io.File
@@ -120,7 +120,7 @@ class GroupDaily {
         var buffer = ""
         for (msg in messageChain) {
             if (msg.isContentEmpty()) continue
-            else if (msg.isPlain()) {
+            else if (msg is PlainText) {
                 if (msg.content.contains('\"')) return null
                 buffer += msg.content
             } else return null
@@ -139,7 +139,7 @@ class GroupDaily {
             }
             val result = grpUpdate(event.group.id, event.sender.id, parsedMessage)
             if (!result) {
-                event.group.sendMessage(event.sender.at() + "更新失败。不应该啊，让我们问一下" + event.group[844548205L].at())
+                event.group.sendMessage(event.sender.at() + PlainText("更新失败。不应该啊，让我们问一下") + (event.group[844548205L]?.at() ?: PlainText("神奇的海螺")))
                 logger.error {
                     "Failed to update. Status: [${event.group.id}][${event.sender.id}] Group is updating: ${grpIsUpdatingBy(
                         event.group.id,

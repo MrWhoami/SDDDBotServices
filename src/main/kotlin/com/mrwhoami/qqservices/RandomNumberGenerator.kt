@@ -1,10 +1,10 @@
 package com.mrwhoami.qqservices
 
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.at
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.message.data.isContentEmpty
-import net.mamoe.mirai.message.data.isPlain
 import kotlin.random.Random
 
 
@@ -19,7 +19,7 @@ class RandomNumberGenerator {
     suspend fun onGrpMsg(event: GroupMessageEvent) {
         // Check if this is text message
         val msg = event.message
-        if (!msg.all { block -> block.isContentEmpty() || block.isPlain() }) {
+        if (!msg.all { block -> block.isContentEmpty() || block is PlainText }) {
             return
         }
         // Check if this is an order

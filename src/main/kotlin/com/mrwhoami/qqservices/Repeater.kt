@@ -1,8 +1,8 @@
 package com.mrwhoami.qqservices
 
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.code.CodableMessage
-import net.mamoe.mirai.message.code.parseMiraiCode
+import net.mamoe.mirai.message.code.MiraiCode.deserializeMiraiCode
 import net.mamoe.mirai.message.data.*
 
 class Repeater {
@@ -21,8 +21,7 @@ class Repeater {
         var buffer = ""
         for (msg in message) {
             if (msg.isContentEmpty()) continue
-            else if (msg.isPlain()) buffer += msg.content
-            else if (msg is CodableMessage) buffer += msg.toMiraiCode()
+            else if (msg is CodableMessage) buffer += msg.serializeToMiraiCode()
             else return null
         }
         if (buffer.isEmpty()) {
@@ -71,7 +70,7 @@ class Repeater {
         // If it has been repeated three times, bot repeat it.
         if (buffer.usrIdSet.size >= 3) {
             buffer.repeated = true
-            event.group.sendMessage(buffer.lastMsg!!.parseMiraiCode())
+            event.group.sendMessage(buffer.lastMsg!!.deserializeMiraiCode())
             return
         }
         return

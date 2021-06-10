@@ -4,6 +4,8 @@ import mu.KotlinLogging
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isAdministrator
 import net.mamoe.mirai.contact.isOwner
+import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.PlainText
 import java.io.File
 
 class BotHelper {
@@ -48,6 +50,13 @@ class BotHelper {
                 }
             }
             return functionsString
+        }
+
+        fun isPlainMessage( messages : MessageChain) : Boolean {
+            for (message in messages) {
+                if (message !is PlainText) return false
+            }
+            return true
         }
     }
 }

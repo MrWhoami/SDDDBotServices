@@ -2,7 +2,7 @@ package com.mrwhoami.qqservices
 
 import mu.KotlinLogging
 import net.mamoe.mirai.contact.isAdministrator
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 
 class MuteMenu {
@@ -19,7 +19,7 @@ class MuteMenu {
         }
         // Check if this is text message
         val msg = event.message
-        if (!msg.all{ block -> block.isContentEmpty() || block.isPlain() }) {
+        if (!msg.all{ block -> block.isContentEmpty() || block is PlainText }) {
             return
         }
         // Check if this is an order

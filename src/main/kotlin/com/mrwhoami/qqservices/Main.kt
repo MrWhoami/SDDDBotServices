@@ -1,25 +1,30 @@
 package com.mrwhoami.qqservices
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import mu.KotlinLogging
-import net.mamoe.mirai.Bot
-import net.mamoe.mirai.alsoLogin
+import net.mamoe.mirai.BotFactory
+import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MemberJoinEvent
-import net.mamoe.mirai.join
-import net.mamoe.mirai.event.subscribeAlways
-import net.mamoe.mirai.message.GroupMessageEvent
+
+import net.mamoe.mirai.utils.BotConfiguration
+import kotlin.system.exitProcess
 
 private val logger = KotlinLogging.logger {}
 
 suspend fun main() {
     // Login QQ. Use another data class to avoid password tracking.
     val login = BotLoginInfo()
-    val miraiBot = Bot(login.qqId, login.qqPassword) {
+    // Check it before using
+    if ((login.qqId == 0L) or (login.qqPassword.isEmpty())) {
+        logger.error { "You should provide your QQ ID and password first." }
+        exitProcess(1)
+    }
+    val miraiBot = BotFactory.newBot(login.qqId, login.qqPassword) {
         fileBasedDeviceInfo("device.json")
-    }.alsoLogin()
+        protocol = BotConfiguration.MiraiProtocol.ANDROID_PHONE
+    }
+    miraiBot.login()
+
     logger.info { "${login.qqId} is logged in." }
 
     // Initialize helper
@@ -35,7 +40,7 @@ suspend fun main() {
 
     logger.info { "Initialization finished." }
 
-    miraiBot.subscribeAlways<GroupMessageEvent> {
+    miraiBot.eventChannel.subscribeAlways<GroupMessageEvent> {
         // repeater behaviour
         rng.onGrpMsg(it)
         repeater.onGrpMsg(it)
@@ -46,7 +51,7 @@ suspend fun main() {
         groupDaily.onGrpMsg(it)
     }
 
-    miraiBot.subscribeAlways<MemberJoinEvent> {
+    miraiBot.eventChannel.subscribeAlways<MemberJoinEvent> {
         welcome.onMemberJoin(it)
     }
 

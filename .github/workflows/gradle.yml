@@ -24,3 +24,14 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        # Artifact name
+        name: sdddbot
+        # A file, directory or wildcard pattern that describes what to upload
+        path: build/libs/*.jar
+        # The desired behavior if no files are found using the provided path.
+        if-no-files-found: error
+        retention-days: 30
