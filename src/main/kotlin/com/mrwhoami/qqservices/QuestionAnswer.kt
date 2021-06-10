@@ -102,16 +102,6 @@ class QuestionAnswer {
                 )
                 grp.sendMessage(answers[Random.nextInt(answers.size)])
             }
-            msgContent.startsWith("呐") -> {
-                if (event.group.id == 1033928478L &&
-                    event.group.botPermission.isAdministrator() &&
-                    !BotHelper.memberIsAdmin(event.sender)) {
-                    event.sender.mute(Random.nextInt(1, 120) * 60)
-                    grp.sendMessage("正义，执行！")
-                } else {
-                    grp.sendMessage("不准口内！")
-                }
-            }
             containsBotName(msgContent) && msgContent.contains("爬") -> {
                 if (BotHelper.memberIsAdmin(event.sender)) {
                     grp.sendMessage("呜呜呜，不要欺负我( TдT)")
