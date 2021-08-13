@@ -40,6 +40,8 @@ class VoteBan {
         }
         if (!(msg.content.contains("口他") ||
                     msg.content.contains("口maki") ||
+                    msg.content.contains("口胎儿") ||
+                    msg.content.contains("口太二") ||
                     msg.content.contains("口小旦") ||
                     msg.content.contains("口水母") ||
                     msg.content.contains("口时雨") ||
