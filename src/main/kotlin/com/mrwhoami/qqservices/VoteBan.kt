@@ -62,6 +62,7 @@ class VoteBan {
         // Get the target.
         val targetId = when {
             event.message.filterIsInstance<At>().firstOrNull() != null -> event.message.filterIsInstance<At>().firstOrNull()!!.target
+            msg.content.contains("口胎儿") || msg.content.contains("口太二") -> 1349556226L
             msg.content.contains("口小旦") -> 875314086L
             msg.content.contains("口水母") -> 1260775699L
             msg.content.contains("口时雨") || msg.content.contains("口時雨") -> 1094829199L
